@@ -418,6 +418,7 @@
     background:var(--charcoal-2);border:1px solid var(--line);border-radius:var(--radius);
     max-width:640px;width:100%;padding:26px;position:relative;
   }
+  #compareModal{max-width:1080px;}
   .modal-close{
     position:absolute;top:14px;right:14px;background:none;border:1px solid var(--line);
     color:var(--sand);width:30px;height:30px;border-radius:50%;
@@ -430,12 +431,22 @@
   .modal-specs div b{color:var(--sand);font-weight:500;}
   .modal .card-actions{margin-top:6px;}
 
-  .compare-table{width:100%;border-collapse:collapse;margin-top:16px;}
+  .saved-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;margin-left:3px;padding:1px 5px;border-radius:999px;background:rgba(217,132,90,.18);color:var(--sand);font-size:10px;line-height:1.4;vertical-align:1px;}
+  .saved-count:empty{display:none;}
+  .compare-table-wrap{width:100%;overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);}
+  .compare-table{width:100%;border-collapse:collapse;margin-top:0;min-width:680px;}
   .compare-table th, .compare-table td{
-    text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13.5px;
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;
   }
-  .compare-table th{color:var(--sand-dim);font-weight:500;width:34%;}
+  .compare-table thead th{color:var(--sand-dim);font-weight:600;min-width:160px;}
+  .compare-table thead th:first-child{min-width:115px;}
+  .compare-table tbody th{color:var(--sand-dim);font-weight:500;white-space:nowrap;}
   .compare-table td{color:var(--sand);}
+  .compare-vehicle{display:flex;align-items:center;gap:10px;min-width:150px;color:var(--sand);}
+  .compare-vehicle img{width:72px;height:52px;object-fit:cover;border-radius:4px;flex:0 0 auto;}
+  .compare-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:var(--charcoal);}
+  .compare-chip button{border:0;background:none;color:var(--sand-dim);font-size:17px;line-height:1;padding:0 2px;}
+  .compare-chip button:hover{color:var(--sand);}
 
   .compare-bar{
     display:none;position:fixed;bottom:0;left:0;right:0;z-index:60;
@@ -675,6 +686,7 @@
       <a href="#" data-page="blog" data-view="blog">Blog</a>
       <a href="#" data-page="sell" data-view="sell">Sell</a>
       <a href="#" data-page="dashboard" data-view="dashboard" data-auth="signed-in" style="display:none;">My Listings</a>
+      <a href="#" data-page="favorites" data-view="favorites" data-auth="signed-in" style="display:none;">Saved <span class="saved-count" data-saved-count></span></a>
       <a href="#" data-page="admin" data-view="admin" data-admin style="display:none;color:var(--alert);">Admin</a>
       <a href="#" data-scroll="contact">Contact</a>
     </nav>
@@ -692,6 +704,7 @@
       <a href="#" data-page="blog" data-view="blog">Blog</a>
       <a href="#" data-page="sell" data-view="sell">Sell</a>
       <a href="#" data-page="dashboard" data-view="dashboard" data-auth="signed-in" style="display:none;">My Listings</a>
+      <a href="#" data-page="favorites" data-view="favorites" data-auth="signed-in" style="display:none;">Saved <span class="saved-count" data-saved-count></span></a>
       <a href="#" data-page="admin" data-view="admin" data-admin style="display:none;color:var(--alert);">Admin</a>
       <a href="#" data-scroll="contact">Contact</a>
       <a href="#" id="navSignInMobile" data-auth="signed-out">Sign in</a>
@@ -990,6 +1003,27 @@
     </div>
   </div>
 
+  <!-- ================= SAVED CARS ================= -->
+  <div class="page" id="page-favorites" hidden>
+    <div class="wrap page-head">
+      <div class="kicker"><span class="dot"></span> Your garage</div>
+      <h1>Saved cars</h1>
+      <p>Keep your shortlist together, then compare the details or contact a seller when you’re ready.</p>
+    </div>
+    <div class="wrap" style="padding:8px 0 70px;">
+      <div class="listings-head">
+        <div><h2>Your shortlist</h2><div class="result-count" id="favoritesCount">— saved cars</div></div>
+        <a href="#" data-view="home" class="navbtn" style="display:inline-block;">Browse cars</a>
+      </div>
+      <div id="favoritesGrid" class="grid"></div>
+      <div id="favoritesEmpty" class="empty-state">
+        <h3>No saved cars yet</h3>
+        <p>Tap the heart on a listing to keep a car in your shortlist.</p>
+        <a href="#" data-view="home" class="navbtn" style="display:inline-block;margin-top:14px;">Find a car</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= ADMIN PAGE ================= -->
   <div class="page" id="page-admin" hidden>
     <div class="wrap page-head">
@@ -1092,7 +1126,7 @@
     <div class="items" id="compareItems"></div>
     <div class="actions">
       <a class="clear-link" id="compareClear">Clear</a>
-      <button class="search-btn" id="compareOpenBtn">Compare now</button>
+      <button class="search-btn" id="compareOpenBtn" disabled>Compare now</button>
     </div>
   </div>
 </div>
@@ -1193,7 +1227,12 @@ const POSTS = [
 
 /* ============ STATE ============ */
 let recentlyViewed = [];
-let compareSelection = [];
+let compareSelection = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('carfinderCompareSelection') || '[]');
+    return Array.isArray(saved) ? [...new Set(saved.map(String))].slice(0, 3) : [];
+  } catch (e) { return []; }
+})();
 let listings = [];           // loaded from Supabase
 let listingsLoaded = false;
 let currentUser = null;      // Supabase auth user, or null if signed out
@@ -1307,12 +1346,16 @@ function legacyCopy(value){
    viewers, so every click below calls showPage() directly instead of relying
    on an <a href="#/..."> to trigger anything on its own. */
 function showPage(page, param){
-  const validPages = ['home','match','blog','post','sell','dashboard','admin'];
+  const validPages = ['home','match','blog','post','sell','dashboard','favorites','admin'];
   let active = validPages.includes(page) ? page : 'home';
 
   // dashboard requires being signed in — bounce to the sell page's sign-in prompt otherwise
   if (active === 'dashboard' && !currentUser){
     showToast('Sign in to see your listings');
+    active = 'sell';
+  }
+  if (active === 'favorites' && !currentUser){
+    showToast('Sign in to see your saved cars');
     active = 'sell';
   }
   // admin requires an actual admins-table row — never trust just "signed in" here
@@ -1330,6 +1373,7 @@ function showPage(page, param){
   if (active === 'post') renderPost(param || '');
   if (active === 'sell') resetSellForm();
   if (active === 'dashboard'){ loadMyListings().then(renderDashboard); }
+  if (active === 'favorites'){ renderFavoritesPage(); }
   if (active === 'admin'){ loadAdminData().then(renderAdminDashboard); }
   window.scrollTo({ top: 0 });
 
@@ -1398,6 +1442,9 @@ async function refreshAuthUI(){
   signedInEls.forEach(el => el.style.display = isIn ? '' : 'none');
   document.querySelectorAll('[data-auth-name]').forEach(el => {
     el.textContent = currentProfile ? currentProfile.display_name : '';
+  });
+  document.querySelectorAll('[data-saved-count]').forEach(el => {
+    el.textContent = myFavorites.size ? String(myFavorites.size) : '';
   });
   document.querySelectorAll('[data-admin]').forEach(el => el.style.display = isAdmin ? '' : 'none');
 }
@@ -1546,6 +1593,9 @@ async function toggleFavorite(listingId){
     const { error } = await sb.from('favorites').insert({ user_id: currentUser.id, listing_id: listingId });
     if (error) { myFavorites.delete(listingId); showToast('Could not update favorites'); }
   }
+  document.querySelectorAll('[data-saved-count]').forEach(el => {
+    el.textContent = myFavorites.size ? String(myFavorites.size) : '';
+  });
   renderListings();
 }
 
@@ -1564,7 +1614,10 @@ async function loadListings(){
     listings = data || [];
   }
   listingsLoaded = true;
+  compareSelection = compareSelection.filter(id => listings.some(car => String(car.id) === String(id))).slice(0, 3);
+  saveCompareSelection();
   renderListings();
+  renderCompareBar();
 }
 
 async function loadMyListings(){
@@ -1647,17 +1700,28 @@ function renderListings(){
   if (results.length === 0){
     grid.style.display = 'none';
     emptyState.style.display = 'block';
+    renderFavoritesPage();
     return;
   }
   grid.style.display = 'grid';
   emptyState.style.display = 'none';
 
-  grid.innerHTML = results.map(c => `
-    <div class="card ${compareSelection.includes(c.id) ? 'is-comparing' : ''}" data-id="${c.id}">
+  renderVehicleCards(grid, results);
+  renderFavoritesPage();
+}
+
+function renderVehicleCards(targetGrid, results){
+  if (!targetGrid) return;
+  targetGrid.style.display = 'grid';
+  targetGrid.innerHTML = results.map(c => {
+    const saved = myFavorites.has(c.id);
+    const comparing = compareSelection.includes(c.id);
+    return `
+    <div class="card ${comparing ? 'is-comparing' : ''}" data-id="${c.id}">
       <div class="photo" style="background-image:url('${carPhoto(c)}')">
-        <span class="badge ${c.clearance === 'Uncleared' ? 'badge-alert' : ''}">${c.clearance}</span>
+        <span class="badge ${c.clearance === 'Uncleared' ? 'badge-alert' : ''}">${escapeHtml(c.clearance)}</span>
         <div class="icon-row">
-          <button class="icon-btn fav-btn" data-id="${c.id}" title="Save" aria-label="Save this listing">${myFavorites.has(c.id) ? '♥' : '♡'}</button>
+          <button class="icon-btn fav-btn" data-id="${c.id}" title="${saved ? 'Remove from saved cars' : 'Save to favorites'}" aria-label="${saved ? 'Remove from saved cars' : 'Save this listing'}" aria-pressed="${saved ? 'true' : 'false'}">${saved ? '♥' : '♡'}</button>
           <button class="icon-btn share-btn" data-id="${c.id}" title="Share" aria-label="Share this listing">&#8599;</button>
         </div>
         <span class="price-tag">${fmtPrice(c.price)}</span>
@@ -1667,24 +1731,55 @@ function renderListings(){
         <div class="loc">${escapeHtml(c.city)}${c.profiles && c.profiles.verified ? ' · <span style="color:var(--khaki);font-weight:600;">Verified seller</span>' : ''}</div>
         <div class="spec-row">
           <span>${fmtMileage(c.mileage)}</span>
-          <span>${c.transmission}</span>
-          <span>${c.fuel}</span>
+          <span>${escapeHtml(c.transmission)}</span>
+          <span>${escapeHtml(c.fuel)}</span>
         </div>
         <div class="card-actions">
           <button class="btn-outline details-btn" data-id="${c.id}">Details</button>
           <a class="btn-whatsapp" href="${waLink(c)}" target="_blank" rel="noopener">WhatsApp</a>
         </div>
         <label class="compare-check">
-          <input type="checkbox" class="compare-check-input" data-id="${c.id}" ${compareSelection.includes(c.id) ? 'checked' : ''}>
-          Add to compare
+          <input type="checkbox" class="compare-check-input" data-id="${c.id}" ${comparing ? 'checked' : ''}>
+          Compare
         </label>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  targetGrid.querySelectorAll('.details-btn').forEach(btn => btn.addEventListener('click', () => openDetail(btn.dataset.id)));
+  targetGrid.querySelectorAll('.share-btn').forEach(btn => btn.addEventListener('click', () => shareCar(carById(btn.dataset.id))));
+  targetGrid.querySelectorAll('.fav-btn').forEach(btn => btn.addEventListener('click', () => toggleFavorite(btn.dataset.id)));
+  targetGrid.querySelectorAll('.compare-check-input').forEach(cb => cb.addEventListener('change', () => toggleCompare(cb.dataset.id, cb.checked)));
+}
 
-  grid.querySelectorAll('.details-btn').forEach(btn => btn.addEventListener('click', () => openDetail(btn.dataset.id)));
-  grid.querySelectorAll('.share-btn').forEach(btn => btn.addEventListener('click', () => shareCar(carById(btn.dataset.id))));
-  grid.querySelectorAll('.fav-btn').forEach(btn => btn.addEventListener('click', () => toggleFavorite(btn.dataset.id)));
-  grid.querySelectorAll('.compare-check-input').forEach(cb => cb.addEventListener('change', () => toggleCompare(cb.dataset.id, cb.checked)));
+function renderFavoritesPage(){
+  const targetGrid = document.getElementById('favoritesGrid');
+  const empty = document.getElementById('favoritesEmpty');
+  const count = document.getElementById('favoritesCount');
+  if (!targetGrid || !empty || !count) return;
+  if (!currentUser){
+    targetGrid.innerHTML = '';
+    targetGrid.style.display = 'none';
+    empty.style.display = 'block';
+    count.textContent = 'Sign in required';
+    return;
+  }
+  if (!listingsLoaded){
+    targetGrid.innerHTML = '';
+    targetGrid.style.display = 'none';
+    empty.style.display = 'none';
+    count.textContent = 'Loading saved cars…';
+    return;
+  }
+  const savedCars = listings.filter(car => myFavorites.has(car.id));
+  count.textContent = `${savedCars.length} ${savedCars.length === 1 ? 'saved car' : 'saved cars'}`;
+  if (!savedCars.length){
+    targetGrid.innerHTML = '';
+    targetGrid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  renderVehicleCards(targetGrid, savedCars);
 }
 
 on('searchBtn', 'click', () => { renderListings(); document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'}); });
@@ -1796,11 +1891,17 @@ on(detailOverlay, 'click', e => { if (e.target === detailOverlay) closeDetail();
 /* ============ COMPARE ============ */
 const compareBar = document.getElementById('compareBar');
 const compareOverlay = document.getElementById('compareOverlay');
+const MAX_COMPARE = 3;
 
+function saveCompareSelection(){
+  try { localStorage.setItem('carfinderCompareSelection', JSON.stringify(compareSelection.slice(0, MAX_COMPARE))); }
+  catch (e) { console.warn('CarFinder: compare selection could not be saved on this device', e); }
+}
 function toggleCompare(id, checked){
   if (checked){
-    if (compareSelection.length >= 2){
-      showToast('You can compare up to 2 cars at a time');
+    if (compareSelection.includes(id)) return;
+    if (compareSelection.length >= MAX_COMPARE){
+      showToast('You can compare up to 3 cars at a time');
       renderListings();
       return;
     }
@@ -1808,43 +1909,59 @@ function toggleCompare(id, checked){
   } else {
     compareSelection = compareSelection.filter(x => x !== id);
   }
+  saveCompareSelection();
   renderListings();
   renderCompareBar();
 }
 function renderCompareBar(){
   const items = document.getElementById('compareItems');
-  if (compareSelection.length === 0){ compareBar.classList.remove('open'); return; }
-  compareBar.classList.add('open');
+  const openButton = document.getElementById('compareOpenBtn');
+  if (!items || !openButton) return;
+  compareSelection = compareSelection.filter(id => !!carById(id)).slice(0, MAX_COMPARE);
+  saveCompareSelection();
+  openButton.disabled = compareSelection.length < 2;
+  if (compareSelection.length === 0){
+    items.innerHTML = '';
+    compareBar.classList.remove('open');
+    return;
+  }
   items.innerHTML = compareSelection.map(id => {
-    const c = carById(id);
-    return `<span><b>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b></span>`;
-  }).join('<span>+</span>');
-  document.getElementById('compareOpenBtn').disabled = compareSelection.length < 2;
+    const car = carById(id);
+    const label = `${car.year} ${car.make} ${car.model}`;
+    return `<span class="compare-chip"><b>${escapeHtml(label)}</b><button type="button" class="compare-remove" data-id="${id}" aria-label="Remove ${escapeHtml(label)} from comparison" title="Remove">&times;</button></span>`;
+  }).join('');
+  items.querySelectorAll('.compare-remove').forEach(btn => btn.addEventListener('click', () => toggleCompare(btn.dataset.id, false)));
+  compareBar.classList.add('open');
 }
 on('compareClear', 'click', () => {
   compareSelection = [];
+  saveCompareSelection();
   renderListings();
   renderCompareBar();
 });
 on('compareOpenBtn', 'click', () => {
-  if (compareSelection.length < 2){ showToast('Pick a second car to compare'); return; }
-  const [a, b] = compareSelection.map(carById);
+  const selectedCars = compareSelection.map(carById).filter(Boolean);
+  if (selectedCars.length < 2){ showToast('Pick at least two cars to compare'); return; }
   const rows = [
-    ['Price', fmtPrice(a.price), fmtPrice(b.price)],
-    ['Year', a.year, b.year],
-    ['Location', escapeHtml(a.city), escapeHtml(b.city)],
-    ['Mileage', fmtMileage(a.mileage), fmtMileage(b.mileage)],
-    ['Transmission', escapeHtml(a.transmission), escapeHtml(b.transmission)],
-    ['Fuel', escapeHtml(a.fuel), escapeHtml(b.fuel)],
-    ['Clearance', escapeHtml(a.clearance), escapeHtml(b.clearance)],
+    ['Price', car => fmtPrice(car.price)],
+    ['Year', car => escapeHtml(car.year)],
+    ['Location', car => escapeHtml(car.city)],
+    ['Mileage', car => fmtMileage(car.mileage)],
+    ['Transmission', car => escapeHtml(car.transmission)],
+    ['Fuel', car => escapeHtml(car.fuel)],
+    ['Clearance', car => escapeHtml(car.clearance)],
+    ['Seller', car => escapeHtml(car.profiles?.display_name || '—')],
+    ['Verified seller', car => car.profiles?.verified ? 'Yes' : 'No'],
+    ['Seller type', car => escapeHtml(car.profiles?.seller_type || '—')]
   ];
   document.getElementById('compareModal').innerHTML = `
     <button class="modal-close" id="compareCloseBtn" aria-label="Close">&times;</button>
-    <h2>Comparing 2 cars</h2>
-    <table class="compare-table">
-      <tr><th></th><th>${a.year} ${escapeHtml(a.make)} ${escapeHtml(a.model)}</th><th>${b.year} ${escapeHtml(b.make)} ${escapeHtml(b.model)}</th></tr>
-      ${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}
-    </table>`;
+    <h2>Compare ${selectedCars.length} cars</h2>
+    <p style="color:var(--sand-dim);font-size:13.5px;margin-top:6px;">Review key details side by side before contacting sellers.</p>
+    <div class="compare-table-wrap"><table class="compare-table">
+      <thead><tr><th scope="col">Specification</th>${selectedCars.map(car => `<th scope="col"><div class="compare-vehicle"><img src="${escapeHtml(carPhoto(car))}" alt=""><span>${escapeHtml(car.year)} ${escapeHtml(car.make)} ${escapeHtml(car.model)}</span></div></th>`).join('')}</tr></thead>
+      <tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th>${selectedCars.map(car => `<td>${value(car) || '—'}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>`;
   document.getElementById('compareCloseBtn').addEventListener('click', () => compareOverlay.classList.remove('open'));
   compareOverlay.classList.add('open');
 });
