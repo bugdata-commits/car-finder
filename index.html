@@ -472,6 +472,87 @@
   footer ul a:hover{color:#fff;}
   .foot-bottom{display:flex;justify-content:space-between;color:rgba(255,255,255,0.45);font-size:12.5px;flex-wrap:wrap;gap:8px;}
 
+
+  /* ---------- marketplace search upgrade ---------- */
+  .hero{padding:64px 0 78px;background:linear-gradient(115deg,#f4f8ff 0%,#fff 54%,#f3f7fb 100%);}
+  .hero h1{font-size:clamp(40px,5vw,62px);max-width:680px;letter-spacing:-.045em;}
+  .hero p.lede{max-width:560px;font-size:17px;}
+  .hero-plate{background:#0b4ea2;color:#fff;border-color:#0b4ea2;box-shadow:0 18px 40px rgba(11,78,162,.18);}
+  .hero-plate .plate-top{border-color:rgba(255,255,255,.35);}
+  .search-panel{margin-top:-46px;}
+  .search-card-pro{grid-template-columns:minmax(220px,1.45fr) minmax(145px,.8fr) minmax(190px,1fr) auto;align-items:end;background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:20px;box-shadow:0 16px 45px rgba(15,27,45,.10);gap:12px;}
+  .search-card-pro .field label,.advanced-filters .field label{font-size:12px;color:#43536a;font-weight:600;}
+  .search-card-pro input,.search-card-pro select,.advanced-filters input,.advanced-filters select{min-height:46px;border:1px solid #d7dee8;border-radius:8px;background:#fff;padding:11px 12px;color:#0f1b2d;}
+  .search-query-field input{font-size:15px;}
+  .search-card-pro .search-btn{height:46px;border-radius:8px;background:#0b4ea2;border-color:#0b4ea2;color:#fff;font-weight:700;padding:0 23px;white-space:nowrap;}
+  .range-inputs{display:flex;align-items:center;gap:8px;color:#718096;}
+  .range-inputs input{width:calc(50% - 10px);min-width:0;}
+  .search-tools-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 3px 0;}
+  .advanced-filters{font-size:13px;}
+  .advanced-filters summary{display:inline-flex;gap:7px;align-items:center;cursor:pointer;color:#0b4ea2;font-weight:700;list-style:none;padding:7px 2px;}
+  .advanced-filters summary::-webkit-details-marker{display:none;}
+  .advanced-filters[open]{flex:1;}
+  .advanced-grid{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:12px;padding:16px;background:#f5f8fc;border:1px solid #e3e9f1;border-radius:10px;margin-top:10px;}
+  .advanced-grid .field input,.advanced-grid .field select{width:100%;}
+  .verified-filter{display:flex;align-items:center;gap:8px;color:#43536a;font-size:13px;align-self:center;}
+  .verified-filter input{accent-color:#0b4ea2;width:17px;height:17px;}
+  .search-actions{display:flex;align-items:center;gap:16px;margin-left:auto;white-space:nowrap;}
+  .text-action{border:0;background:none;color:#53647a;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;padding:6px 0;}
+  .text-action:hover{color:#0b4ea2;}
+  .quick-searches{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 2px 0;color:#64748b;font-size:12px;}
+  .quick-searches button{border:1px solid #dce4ee;border-radius:999px;padding:6px 12px;background:#fff;color:#334155;font-size:12px;}
+  .quick-searches button:hover{border-color:#0b4ea2;color:#0b4ea2;background:#f3f7ff;}
+  .budget-section{padding:64px 0;margin:36px 0 8px;background:#f4f7fb;border-top:1px solid #e5ebf2;border-bottom:1px solid #e5ebf2;}
+  .budget-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center;}
+  .budget-copy .eyebrow-line{margin-bottom:12px;}
+  .budget-copy h2{font-size:clamp(28px,3vw,38px);line-height:1.12;max-width:470px;letter-spacing:-.035em;}
+  .budget-copy p{color:#5b6b80;max-width:430px;margin:16px 0 18px;}
+  .budget-link{color:#0b4ea2;font-size:14px;font-weight:700;}
+  .budget-calculator{background:#fff;border:1px solid #e0e7ef;border-radius:14px;padding:24px;box-shadow:0 12px 36px rgba(15,27,45,.06);}
+  .budget-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+  .budget-card-head h3{font-size:19px;margin-top:4px;}
+  .budget-kicker{font-size:11px;font-weight:700;color:#0b4ea2;text-transform:uppercase;letter-spacing:.08em;}
+  .budget-currency{background:#eef4fc;color:#0b4ea2;border-radius:999px;font-size:11px;font-weight:700;padding:6px 10px;}
+  .budget-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .budget-fields .field label{display:block;font-size:12px;color:#506176;margin-bottom:6px;}
+  .budget-fields input,.budget-fields select{width:100%;min-height:42px;border:1px solid #dbe2ea;border-radius:7px;padding:9px 11px;color:#0f1b2d;background:#fff;font:inherit;}
+  .money-input{display:flex;align-items:center;border:1px solid #dbe2ea;border-radius:7px;padding:0 10px;color:#718096;}
+  .money-input input{border:0;outline:0;padding-left:5px;box-shadow:none;}
+  .money-input input:focus{outline:0;}
+  .payment-result{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;padding:16px 18px;background:#f2f7ff;border-radius:9px;}
+  .payment-result span{display:block;color:#52647b;font-size:12px;}
+  .payment-result strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:27px;color:#0b4ea2;}
+  .payment-note{text-align:right;max-width:155px;}
+  .calculator-disclaimer{margin:12px 0 0;color:#738095;font-size:11px;line-height:1.5;}
+  .listings-section{padding-top:48px;}
+  .listings-head h2{letter-spacing:-.025em;}
+  .card{border-radius:10px;border-color:#e0e6ee;transition:transform .18s,box-shadow .18s,border-color .18s;}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(15,27,45,.09);border-color:#c6d5e7;}
+  .card .photo{min-height:190px;}
+  .card .body{padding:17px;}
+  .card .price-tag{border-radius:6px;}
+  @media(max-width:860px){
+    .search-card-pro{grid-template-columns:1fr 1fr;}
+    .search-card-pro .search-query-field{grid-column:1/-1;}
+    .search-card-pro .search-btn{grid-column:1/-1;}
+    .budget-layout{grid-template-columns:1fr;gap:28px;}
+    .budget-copy h2{max-width:640px;}
+  }
+  @media(max-width:560px){
+    .hero{padding:48px 0 68px;}
+    .hero h1{font-size:39px;}
+    .search-card-pro{grid-template-columns:1fr;padding:16px;}
+    .search-card-pro .search-query-field,.search-card-pro .search-btn{grid-column:auto;}
+    .search-tools-row{align-items:flex-start;flex-direction:column;}
+    .search-actions{width:100%;justify-content:space-between;margin:0;}
+    .advanced-filters[open]{width:100%;}
+    .advanced-grid{grid-template-columns:1fr 1fr;}
+    .budget-section{padding:44px 0;margin-top:26px;}
+    .budget-calculator{padding:18px;}
+    .payment-result{align-items:flex-start;flex-direction:column;}
+    .payment-note{text-align:left;max-width:none;}
+  }
+
   /* ---------- responsive ---------- */
   @media (max-width:860px){
     nav.links{display:none;}
@@ -544,59 +625,95 @@
         <div>
           <div class="eyebrow-line"><span class="dot"></span> Harare · Bulawayo · Mutare · Gweru</div>
           <h1>Find your next car, without the runaround.</h1>
-          <p class="lede">CarFinder lists vetted cars from dealers and private sellers across Zimbabwe — clearance status, mileage and price shown upfront, so you're not chasing sellers for basics.</p>
+          <p class="lede">Browse cars from dealers and private sellers across Zimbabwe, with price, mileage and import status up front. Compare options, plan a budget and contact sellers directly.</p>
           <div class="stat-block">
-            <div><b>340+</b><span>cars listed</span></div>
-            <div><b>4</b><span>cities covered</span></div>
-            <div><b>USD</b><span>prices, no surprises</span></div>
+            <div><b>01</b><span>Search local listings</span></div>
+            <div><b>02</b><span>Compare your shortlist</span></div>
+            <div><b>03</b><span>Contact sellers directly</span></div>
           </div>
         </div>
         <div class="hero-plate">
-          <div class="plate-top"><span>Zimbabwe</span><span>Est. Harare</span></div>
-          <div class="plate-number">CAR FNDR</div>
-          <div class="plate-foot">Every listing checked before it goes live</div>
+          <div class="plate-top"><span>Made for</span><span>Zimbabwe</span></div>
+          <div class="plate-number">CAR FINDER</div>
+          <div class="plate-foot">Make the next car decision with more confidence.</div>
         </div>
       </div>
     </section>
 
     <div class="wrap search-panel">
-      <div class="search-card">
-        <div class="field">
-          <label for="q">Make or model</label>
-          <input id="q" type="text" placeholder="e.g. Toyota Hilux">
+      <div class="search-card search-card-pro">
+        <div class="field search-query-field">
+          <label for="q">Make, model or keyword</label>
+          <input id="q" type="search" placeholder="e.g. Toyota Hilux, Honda Fit" autocomplete="off">
         </div>
         <div class="field">
-          <label for="loc">Location</label>
+          <label for="loc">City</label>
           <select id="loc">
-            <option value="">All cities</option>
-            <option>Harare</option>
-            <option>Bulawayo</option>
-            <option>Mutare</option>
-            <option>Gweru</option>
-            <option>Masvingo</option>
+            <option value="">All Zimbabwe</option>
+            <option>Harare</option><option>Bulawayo</option><option>Mutare</option><option>Gweru</option><option>Masvingo</option>
           </select>
         </div>
         <div class="field">
-          <label for="price">Max price (USD)</label>
-          <select id="price">
-            <option value="">Any price</option>
-            <option value="5000">Under $5,000</option>
-            <option value="10000">Under $10,000</option>
-            <option value="20000">Under $20,000</option>
-            <option value="40000">Under $40,000</option>
-          </select>
+          <label>Price range (USD)</label>
+          <div class="range-inputs">
+            <input id="priceMin" type="number" min="0" step="500" placeholder="Min" aria-label="Minimum price in US dollars">
+            <span aria-hidden="true">—</span>
+            <input id="price" type="number" min="0" step="500" placeholder="Max" aria-label="Maximum price in US dollars">
+          </div>
         </div>
-        <div class="field">
-          <label for="trans">Transmission</label>
-          <select id="trans">
-            <option value="">Any</option>
-            <option>Manual</option>
-            <option>Automatic</option>
-          </select>
+        <button class="search-btn" id="searchBtn">Search cars</button>
+      </div>
+      <div class="search-tools-row">
+        <details class="advanced-filters" id="advancedFilters">
+          <summary><span aria-hidden="true">＋</span> More filters</summary>
+          <div class="advanced-grid">
+            <div class="field"><label for="yearMin">Year from</label><input id="yearMin" type="number" min="1950" max="2035" placeholder="Any year"></div>
+            <div class="field"><label for="yearMax">Year to</label><input id="yearMax" type="number" min="1950" max="2035" placeholder="Any year"></div>
+            <div class="field"><label for="bodyType">Body type</label><select id="bodyType"><option value="">Any body type</option><option>SUV</option><option>Pickup</option><option>Sedan</option><option>Hatchback</option><option>Van</option></select></div>
+            <div class="field"><label for="fuelType">Fuel</label><select id="fuelType"><option value="">Any fuel</option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
+            <div class="field"><label for="trans">Transmission</label><select id="trans"><option value="">Any transmission</option><option>Manual</option><option>Automatic</option></select></div>
+            <div class="field"><label for="clearanceFilter">Import status</label><select id="clearanceFilter"><option value="">Any status</option><option>Cleared</option><option>Uncleared</option></select></div>
+            <div class="field"><label for="mileageMax">Maximum mileage (km)</label><input id="mileageMax" type="number" min="0" step="10000" placeholder="Any mileage"></div>
+            <label class="verified-filter"><input id="verifiedOnly" type="checkbox"> Verified sellers only</label>
+          </div>
+        </details>
+        <div class="search-actions">
+          <button class="text-action" id="saveSearchBtn" type="button">Save this search</button>
+          <button class="text-action" id="loadSearchBtn" type="button" hidden>Load saved search</button>
+          <button class="text-action" id="resetSearchBtn" type="button">Clear filters</button>
         </div>
-        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+      <div class="quick-searches" aria-label="Popular searches">
+        <span>Popular:</span>
+        <button type="button" data-quick-search="Toyota">Toyota</button>
+        <button type="button" data-quick-search="Honda Fit">Honda Fit</button>
+        <button type="button" data-quick-search="Hilux">Hilux</button>
+        <button type="button" data-quick-search="Mazda Demio">Mazda Demio</button>
       </div>
     </div>
+
+
+    <section class="budget-section" id="budgetPlanner">
+      <div class="wrap budget-layout">
+        <div class="budget-copy">
+          <div class="eyebrow-line"><span class="dot"></span> Plan your budget</div>
+          <h2>Know the monthly number before you message a seller.</h2>
+          <p>Estimate a payment from the price, deposit, rate and term you enter. It’s a planning tool, not a lender quote.</p>
+          <a href="#listings" class="budget-link">Browse cars <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="budget-calculator" id="budgetCalculator">
+          <div class="budget-card-head"><div><span class="budget-kicker">CarFinder calculator</span><h3>Monthly payment estimate</h3></div><span class="budget-currency">USD</span></div>
+          <div class="budget-fields">
+            <div class="field"><label for="loanPrice">Vehicle price</label><div class="money-input"><span>$</span><input id="loanPrice" type="number" min="0" step="100" value="10000"></div></div>
+            <div class="field"><label for="loanDeposit">Deposit</label><div class="money-input"><span>$</span><input id="loanDeposit" type="number" min="0" step="100" value="1000"></div></div>
+            <div class="field"><label for="loanRate">Annual interest rate</label><div class="money-input"><input id="loanRate" type="number" min="0" max="100" step="0.1" value="0"><span>%</span></div></div>
+            <div class="field"><label for="loanTerm">Term</label><select id="loanTerm"><option value="12">12 months</option><option value="24">24 months</option><option value="36" selected>36 months</option><option value="48">48 months</option><option value="60">60 months</option></select></div>
+          </div>
+          <div class="payment-result"><div><span>Estimated monthly payment</span><strong id="monthlyEstimate">$250</strong></div><span class="payment-note" id="paymentNote">Principal-only estimate at 0% interest</span></div>
+          <p class="calculator-disclaimer">Actual rates, fees and approval depend on your lender. Confirm all terms directly with the provider.</p>
+        </div>
+      </div>
+    </section>
 
     <section class="listings-section" id="listings">
       <div class="wrap">
@@ -1401,18 +1518,42 @@ function renderListings(){
     return;
   }
 
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  const loc = document.getElementById('loc').value;
-  const maxPrice = document.getElementById('price').value;
-  const trans = document.getElementById('trans').value;
+  const value = id => (document.getElementById(id)?.value || '').trim();
+  const q = value('q').toLowerCase();
+  const loc = value('loc');
+  const minPrice = value('priceMin') === '' ? 0 : Number(value('priceMin'));
+  const maxPrice = value('price') === '' ? Infinity : Number(value('price'));
+  const minYear = value('yearMin') === '' ? 0 : Number(value('yearMin'));
+  const maxYear = value('yearMax') === '' ? Infinity : Number(value('yearMax'));
+  const maxMileage = value('mileageMax') === '' ? Infinity : Number(value('mileageMax'));
+  const trans = value('trans');
+  const fuel = value('fuelType').toLowerCase();
+  const bodyType = value('bodyType').toLowerCase();
+  const clearance = value('clearanceFilter').toLowerCase();
+  const verifiedOnly = !!document.getElementById('verifiedOnly')?.checked;
   const sort = document.getElementById('sort').value;
 
   let results = listings.filter(c => {
-    const text = (c.make + ' ' + c.model).toLowerCase();
+    const text = [c.make,c.model,c.description,c.city,c.fuel,c.transmission].filter(Boolean).join(' ').toLowerCase();
     if (q && !text.includes(q)) return false;
-    if (loc && c.city !== loc) return false;
-    if (maxPrice && Number(c.price) > Number(maxPrice)) return false;
-    if (trans && c.transmission !== trans) return false;
+    if (loc && String(c.city || '').toLowerCase() !== loc.toLowerCase()) return false;
+    const carPrice = Number(c.price);
+    const carYear = Number(c.year);
+    const carMileage = Number(c.mileage);
+    if (Number.isFinite(carPrice) && carPrice < minPrice) return false;
+    if (maxPrice !== Infinity && (!Number.isFinite(carPrice) || carPrice > maxPrice)) return false;
+    if (minYear && (!Number.isFinite(carYear) || carYear < minYear)) return false;
+    if (maxYear !== Infinity && (!Number.isFinite(carYear) || carYear > maxYear)) return false;
+    if (maxMileage !== Infinity && (!Number.isFinite(carMileage) || carMileage > maxMileage)) return false;
+    if (trans && String(c.transmission || '').toLowerCase() !== trans.toLowerCase()) return false;
+    if (fuel && String(c.fuel || '').toLowerCase() !== fuel) return false;
+    if (clearance && String(c.clearance || '').toLowerCase() !== clearance) return false;
+    if (verifiedOnly && !(c.profiles && c.profiles.verified)) return false;
+    if (bodyType){
+      const bodyWords = {suv:['suv','crossover'],pickup:['pickup','pick-up','bakkie','truck'],sedan:['sedan','saloon'],hatchback:['hatchback','hatch'],van:['van','minibus']};
+      const candidates = [c.body_type,c.body,c.vehicle_type,c.model,c.description].filter(Boolean).join(' ').toLowerCase();
+      if (!(bodyWords[bodyType] || [bodyType]).some(term => candidates.includes(term))) return false;
+    }
     return true;
   });
 
@@ -1466,9 +1607,56 @@ function renderListings(){
   grid.querySelectorAll('.compare-check-input').forEach(cb => cb.addEventListener('change', () => toggleCompare(cb.dataset.id, cb.checked)));
 }
 
-on('searchBtn', 'click', renderListings);
-['sort','loc','price','trans'].forEach(id => on(id, 'change', renderListings));
-on('q', 'keydown', e => { if (e.key === 'Enter') renderListings(); });
+on('searchBtn', 'click', () => { renderListings(); document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'}); });
+['sort','loc','price','priceMin','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
+['q','price','priceMin','yearMin','yearMax','mileageMax'].forEach(id => on(id, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderListings(); } }));
+document.querySelectorAll('[data-quick-search]').forEach(btn => btn.addEventListener('click', () => {
+  document.getElementById('q').value = btn.dataset.quickSearch;
+  renderListings();
+  document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'});
+}));
+function searchPayload(){
+  return Object.fromEntries(['q','loc','priceMin','price','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter'].map(id => [id, document.getElementById(id)?.value || '']));
+}
+function updateSavedSearchButton(){
+  const saved = localStorage.getItem('carfinderSavedSearch');
+  const load = document.getElementById('loadSearchBtn');
+  if (load) load.hidden = !saved;
+}
+on('saveSearchBtn','click', () => {
+  localStorage.setItem('carfinderSavedSearch', JSON.stringify({...searchPayload(),verifiedOnly:!!document.getElementById('verifiedOnly').checked}));
+  updateSavedSearchButton(); showToast('Search saved on this device');
+});
+on('loadSearchBtn','click', () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('carfinderSavedSearch') || '{}');
+    Object.entries(saved).forEach(([id,v]) => { const el=document.getElementById(id); if (el && id==='verifiedOnly') el.checked=!!v; else if(el) el.value=v; });
+    renderListings(); showToast('Saved search loaded');
+  } catch(e) { showToast('Could not load saved search'); }
+});
+on('resetSearchBtn','click', () => {
+  ['q','loc','priceMin','price','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('verifiedOnly').checked=false;
+  renderListings();
+});
+
+
+/* ============ PAYMENT PLANNER ============ */
+function updatePaymentEstimate(){
+  const price = Math.max(0, Number(document.getElementById('loanPrice').value) || 0);
+  const deposit = Math.min(price, Math.max(0, Number(document.getElementById('loanDeposit').value) || 0));
+  const annualRate = Math.max(0, Number(document.getElementById('loanRate').value) || 0);
+  const months = Math.max(1, Number(document.getElementById('loanTerm').value) || 36);
+  const principal = price - deposit;
+  const monthlyRate = annualRate / 1200;
+  const payment = monthlyRate ? principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)) : principal / months;
+  document.getElementById('monthlyEstimate').textContent = '$' + Math.round(payment).toLocaleString('en-US');
+  document.getElementById('paymentNote').textContent = annualRate ? `${annualRate}% entered rate · ${months} months` : `Principal-only estimate at 0% interest · ${months} months`;
+}
+['loanPrice','loanDeposit','loanRate','loanTerm'].forEach(id => on(id,'input',updatePaymentEstimate));
+['loanTerm'].forEach(id => on(id,'change',updatePaymentEstimate));
+updatePaymentEstimate();
+updateSavedSearchButton();
 
 /* ============ RECENTLY VIEWED ============ */
 function trackRecentlyViewed(car){
