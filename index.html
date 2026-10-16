@@ -1520,7 +1520,7 @@ async function toggleFavorite(listingId){
 async function loadListings(){
   const { data, error } = await sb
     .from('listings')
-    .select('*, profiles(display_name, whatsapp_number, verified, seller_type)')
+    .select('*, profiles!listings_seller_id_fkey(display_name, whatsapp_number, verified, seller_type)')
     .eq('status', 'active')
     .order('created_at', { ascending: false });
   if (error){
