@@ -743,7 +743,14 @@
               <div class="field"><label for="fuelType">Fuel</label><select id="fuelType"><option value="">Any fuel</option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
               <div class="field"><label for="trans">Transmission</label><select id="trans"><option value="">Any transmission</option><option>Manual</option><option>Automatic</option></select></div>
               <div class="field"><label for="clearanceFilter">Import status</label><select id="clearanceFilter"><option value="">Any status</option><option>Cleared</option><option>Uncleared</option></select></div>
-              <div class="field"><label for="mileageMax">Maximum mileage (km)</label><input id="mileageMax" type="number" min="0" step="10000" placeholder="Any mileage"></div>
+              <div class="field">
+                <label>Mileage range (km)</label>
+                <div class="range-inputs">
+                  <input id="mileageMin" type="number" min="0" step="10000" placeholder="Min" aria-label="Minimum mileage in kilometres">
+                  <span aria-hidden="true">—</span>
+                  <input id="mileageMax" type="number" min="0" step="10000" placeholder="Max" aria-label="Maximum mileage in kilometres">
+                </div>
+              </div>
               <label class="verified-filter"><input id="verifiedOnly" type="checkbox"> Verified sellers only</label>
             </div>
           </details>
@@ -1596,6 +1603,7 @@ function renderListings(){
   const maxPrice = value('price') === '' ? Infinity : Number(value('price'));
   const minYear = value('yearMin') === '' ? 0 : Number(value('yearMin'));
   const maxYear = value('yearMax') === '' ? Infinity : Number(value('yearMax'));
+  const minMileage = value('mileageMin') === '' ? 0 : Number(value('mileageMin'));
   const maxMileage = value('mileageMax') === '' ? Infinity : Number(value('mileageMax'));
   const trans = value('trans');
   const fuel = value('fuelType').toLowerCase();
@@ -1615,6 +1623,7 @@ function renderListings(){
     if (maxPrice !== Infinity && (!Number.isFinite(carPrice) || carPrice > maxPrice)) return false;
     if (minYear && (!Number.isFinite(carYear) || carYear < minYear)) return false;
     if (maxYear !== Infinity && (!Number.isFinite(carYear) || carYear > maxYear)) return false;
+    if (minMileage > 0 && (!Number.isFinite(carMileage) || carMileage < minMileage)) return false;
     if (maxMileage !== Infinity && (!Number.isFinite(carMileage) || carMileage > maxMileage)) return false;
     if (trans && String(c.transmission || '').toLowerCase() !== trans.toLowerCase()) return false;
     if (fuel && String(c.fuel || '').toLowerCase() !== fuel) return false;
@@ -1679,15 +1688,15 @@ function renderListings(){
 }
 
 on('searchBtn', 'click', () => { renderListings(); document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'}); });
-['sort','loc','price','priceMin','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
-['q','price','priceMin','yearMin','yearMax','mileageMax'].forEach(id => on(id, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderListings(); } }));
+['sort','loc','price','priceMin','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
+['q','price','priceMin','yearMin','yearMax','mileageMin','mileageMax'].forEach(id => on(id, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderListings(); } }));
 document.querySelectorAll('[data-quick-search]').forEach(btn => btn.addEventListener('click', () => {
   document.getElementById('q').value = btn.dataset.quickSearch;
   renderListings();
   document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'});
 }));
 function searchPayload(){
-  return Object.fromEntries(['q','loc','priceMin','price','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter'].map(id => [id, document.getElementById(id)?.value || '']));
+  return Object.fromEntries(['q','loc','priceMin','price','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter'].map(id => [id, document.getElementById(id)?.value || '']));
 }
 function updateSavedSearchButton(){
   const saved = localStorage.getItem('carfinderSavedSearch');
@@ -1706,7 +1715,7 @@ on('loadSearchBtn','click', () => {
   } catch(e) { showToast('Could not load saved search'); }
 });
 on('resetSearchBtn','click', () => {
-  ['q','loc','priceMin','price','yearMin','yearMax','mileageMax','trans','fuelType','bodyType','clearanceFilter'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['q','loc','priceMin','price','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('verifiedOnly').checked=false;
   renderListings();
 });
