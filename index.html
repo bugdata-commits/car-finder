@@ -636,6 +636,32 @@
     .grid{grid-template-columns:1fr;}
   }
 
+
+  /* ---------- centered brand header ---------- */
+  .nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center;}
+  .nav > nav.links{grid-column:1;grid-row:1;justify-self:start;min-width:0;gap:clamp(12px,1.6vw,22px);font-size:14px;}
+  .nav > .logo{grid-column:2;grid-row:1;justify-self:center;z-index:2;}
+  .nav > .logo img{height:38px;width:auto;}
+  .nav > .nav-actions{grid-column:3;grid-row:1;justify-self:end;white-space:nowrap;z-index:1;}
+  .nav > .menu-toggle{grid-column:1;grid-row:1;justify-self:start;}
+  @media(max-width:860px){
+    .nav{grid-template-columns:minmax(44px,1fr) auto minmax(44px,1fr);gap:8px;padding:11px 0;}
+    .nav > nav.links{display:none;}
+    .nav > .logo{grid-column:2;}
+    .nav > .menu-toggle{display:flex;grid-column:1;}
+    .nav > .nav-actions{grid-column:3;gap:8px !important;}
+    .nav .navbtn{padding:8px 11px;font-size:12.5px;}
+  }
+  @media(max-width:560px){
+    .nav{grid-template-columns:minmax(40px,1fr) auto minmax(40px,1fr);gap:8px;}
+    .nav > .logo{grid-column:2;justify-self:center;}
+    .nav > .logo img{height:34px;}
+    .nav > .menu-toggle{grid-column:1;width:36px;height:36px;}
+    .nav > .nav-actions{grid-column:3;}
+    .nav-actions #navSignIn,.nav-actions #navSignOutBtn{display:none !important;}
+    .nav .navbtn{padding:8px 10px;font-size:12px;}
+  }
+
 </style>
 </head>
 <body>
@@ -652,7 +678,7 @@
       <a href="#" data-page="admin" data-view="admin" data-admin style="display:none;color:var(--alert);">Admin</a>
       <a href="#" data-scroll="contact">Contact</a>
     </nav>
-    <div style="display:flex;align-items:center;gap:14px;">
+    <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
       <a href="#" id="navSignIn" data-auth="signed-out" style="color:var(--sand-dim);font-size:15px;">Sign in</a>
       <button id="navSignOutBtn" data-auth="signed-in" style="display:none;background:none;border:1px solid var(--line);color:var(--sand);padding:8px 14px;border-radius:var(--radius);font-size:14px;">Sign out</button>
       <a href="#" data-page="sell" data-view="sell" class="navbtn" id="navSellBtn">List your car</a>
