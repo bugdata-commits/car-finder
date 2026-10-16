@@ -578,6 +578,64 @@
     .stat-block{gap:22px;}
     .modal-specs{grid-template-columns:1fr;}
   }
+
+  /* ---------- marketplace layout pass ---------- */
+  .hero{padding:52px 0 34px;background:radial-gradient(ellipse 780px 360px at 80% 0%,rgba(32,112,213,.35),transparent 64%),linear-gradient(118deg,#081a36 0%,#0b315f 58%,#104c91 100%);border:0;color:#fff;}
+  .hero-copy{padding-top:10px;}
+  .hero .eyebrow-line{color:rgba(255,255,255,.74);margin-bottom:14px;}
+  .hero .eyebrow-line .dot{background:#35d28a;}
+  .hero h1{color:#fff;font-size:clamp(38px,4.6vw,58px);max-width:780px;line-height:1.04;letter-spacing:-.045em;}
+  .hero p.lede{color:rgba(255,255,255,.78);max-width:620px;margin-top:14px;font-size:16px;}
+  .hero .search-panel{margin:28px auto 0;padding:0;position:relative;}
+  .hero .search-card-pro{grid-template-columns:minmax(240px,1.5fr) minmax(150px,.8fr) minmax(190px,1fr) auto;border:0;border-radius:11px;padding:15px;box-shadow:0 18px 52px rgba(0,0,0,.22);gap:10px;}
+  .hero .search-card-pro .field label{margin-bottom:6px;color:#516176;font-size:11.5px;}
+  .hero .search-card-pro input,.hero .search-card-pro select{min-height:48px;border-radius:7px;background:#fff;}
+  .hero .search-card-pro .search-btn{min-height:48px;height:48px;border-radius:7px;background:#0b4ea2;border-color:#0b4ea2;color:#fff;font-size:14px;font-weight:700;}
+  .hero .search-tools-row{padding:12px 3px 0;}
+  .hero .advanced-filters summary,.hero .search-actions .text-action{color:#fff;}
+  .hero .advanced-filters summary{padding:6px 2px;}
+  .hero .search-actions .text-action{opacity:.82;}
+  .hero .search-actions .text-action:hover{opacity:1;color:#fff;}
+  .hero .advanced-grid{background:#fff;border-color:#dae3ef;box-shadow:0 12px 24px rgba(0,0,0,.12);}
+  .hero .quick-searches{padding:15px 2px 0;color:rgba(255,255,255,.7);}
+  .hero .quick-searches button{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.26);color:#fff;}
+  .hero .quick-searches button:hover{background:rgba(255,255,255,.2);border-color:#fff;color:#fff;}
+  .hero-trust{display:flex;gap:26px;flex-wrap:wrap;padding-top:24px;color:rgba(255,255,255,.64);font-size:11.5px;}
+  .hero-trust span{display:flex;align-items:center;gap:8px;}
+  .hero-trust span:before{content:'✓';color:#49d598;font-weight:700;}
+  .budget-section{margin-top:0;padding:52px 0;background:#f5f8fc;}
+  .listings-section{padding-top:52px;}
+  .listings-head{align-items:center;padding-bottom:15px;border-bottom:1px solid #e7ebf1;margin-bottom:22px;}
+  .listings-head h2{font-size:27px;}
+  .result-count{margin-top:3px;}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;}
+  .card{border-radius:9px;background:#fff;box-shadow:0 2px 10px rgba(15,27,45,.035);}
+  .card .photo{aspect-ratio:4/3;min-height:175px;}
+  .card .body{padding:14px;}
+  .card h3{font-size:16px;}
+  .card .spec-row{gap:8px;flex-wrap:wrap;}
+  .card-actions{gap:7px;}
+  .card .btn-outline,.card .btn-whatsapp{border-radius:6px;}
+  @media(max-width:1020px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  @media(max-width:860px){
+    .hero{padding:46px 0 30px;}
+    .hero .search-card-pro{grid-template-columns:1fr 1fr;}
+    .hero .search-card-pro .search-query-field,.hero .search-card-pro .search-btn{grid-column:1/-1;}
+    .hero-trust{gap:14px;}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media(max-width:560px){
+    .hero{padding:40px 0 26px;}
+    .hero h1{font-size:38px;}
+    .hero .search-panel{margin-top:22px;}
+    .hero .search-card-pro{grid-template-columns:1fr;padding:13px;}
+    .hero .search-card-pro .search-query-field,.hero .search-card-pro .search-btn{grid-column:auto;}
+    .hero .search-tools-row{align-items:flex-start;}
+    .hero .search-actions{gap:12px;}
+    .hero-trust{display:grid;grid-template-columns:1fr 1fr;}
+    .grid{grid-template-columns:1fr;}
+  }
+
 </style>
 </head>
 <body>
@@ -621,77 +679,64 @@
   <!-- ================= HOME PAGE ================= -->
   <div class="page" id="page-home">
     <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <div class="eyebrow-line"><span class="dot"></span> Harare · Bulawayo · Mutare · Gweru</div>
-          <h1>Find your next car, without the runaround.</h1>
-          <p class="lede">Browse cars from dealers and private sellers across Zimbabwe, with price, mileage and import status up front. Compare options, plan a budget and contact sellers directly.</p>
-          <div class="stat-block">
-            <div><b>01</b><span>Search local listings</span></div>
-            <div><b>02</b><span>Compare your shortlist</span></div>
-            <div><b>03</b><span>Contact sellers directly</span></div>
+      <div class="wrap hero-copy">
+        <div class="eyebrow-line"><span class="dot"></span> Zimbabwe’s local car marketplace</div>
+        <h1>Find a car that fits your life and your budget.</h1>
+        <p class="lede">Explore cars from dealers and private sellers across Zimbabwe. Compare the details that matter, then contact the seller directly.</p>
+      </div>
+      <div class="wrap search-panel">
+        <div class="search-card search-card-pro">
+          <div class="field search-query-field">
+            <label for="q">Make, model or keyword</label>
+            <input id="q" type="search" placeholder="e.g. Toyota Hilux, Honda Fit" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="loc">Location</label>
+            <select id="loc">
+              <option value="">All Zimbabwe</option>
+              <option>Harare</option><option>Bulawayo</option><option>Mutare</option><option>Gweru</option><option>Masvingo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Price range (USD)</label>
+            <div class="range-inputs">
+              <input id="priceMin" type="number" min="0" step="500" placeholder="Min" aria-label="Minimum price in US dollars">
+              <span aria-hidden="true">—</span>
+              <input id="price" type="number" min="0" step="500" placeholder="Max" aria-label="Maximum price in US dollars">
+            </div>
+          </div>
+          <button class="search-btn" id="searchBtn">Search cars</button>
+        </div>
+        <div class="search-tools-row">
+          <details class="advanced-filters" id="advancedFilters">
+            <summary><span aria-hidden="true">＋</span> More filters</summary>
+            <div class="advanced-grid">
+              <div class="field"><label for="yearMin">Year from</label><input id="yearMin" type="number" min="1950" max="2035" placeholder="Any year"></div>
+              <div class="field"><label for="yearMax">Year to</label><input id="yearMax" type="number" min="1950" max="2035" placeholder="Any year"></div>
+              <div class="field"><label for="bodyType">Body type</label><select id="bodyType"><option value="">Any body type</option><option>SUV</option><option>Pickup</option><option>Sedan</option><option>Hatchback</option><option>Van</option></select></div>
+              <div class="field"><label for="fuelType">Fuel</label><select id="fuelType"><option value="">Any fuel</option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
+              <div class="field"><label for="trans">Transmission</label><select id="trans"><option value="">Any transmission</option><option>Manual</option><option>Automatic</option></select></div>
+              <div class="field"><label for="clearanceFilter">Import status</label><select id="clearanceFilter"><option value="">Any status</option><option>Cleared</option><option>Uncleared</option></select></div>
+              <div class="field"><label for="mileageMax">Maximum mileage (km)</label><input id="mileageMax" type="number" min="0" step="10000" placeholder="Any mileage"></div>
+              <label class="verified-filter"><input id="verifiedOnly" type="checkbox"> Verified sellers only</label>
+            </div>
+          </details>
+          <div class="search-actions">
+            <button class="text-action" id="saveSearchBtn" type="button">Save search</button>
+            <button class="text-action" id="loadSearchBtn" type="button" hidden>Load saved</button>
+            <button class="text-action" id="resetSearchBtn" type="button">Clear</button>
           </div>
         </div>
-        <div class="hero-plate">
-          <div class="plate-top"><span>Made for</span><span>Zimbabwe</span></div>
-          <div class="plate-number">CAR FINDER</div>
-          <div class="plate-foot">Make the next car decision with more confidence.</div>
+        <div class="quick-searches" aria-label="Popular searches">
+          <span>Popular searches</span>
+          <button type="button" data-quick-search="Toyota">Toyota</button>
+          <button type="button" data-quick-search="Honda Fit">Honda Fit</button>
+          <button type="button" data-quick-search="Hilux">Hilux</button>
+          <button type="button" data-quick-search="Mazda Demio">Mazda Demio</button>
         </div>
       </div>
+      <div class="hero-trust wrap"><span>Zimbabwe-focused listings</span><span>Side-by-side comparisons</span><span>Direct seller contact</span></div>
     </section>
-
-    <div class="wrap search-panel">
-      <div class="search-card search-card-pro">
-        <div class="field search-query-field">
-          <label for="q">Make, model or keyword</label>
-          <input id="q" type="search" placeholder="e.g. Toyota Hilux, Honda Fit" autocomplete="off">
-        </div>
-        <div class="field">
-          <label for="loc">City</label>
-          <select id="loc">
-            <option value="">All Zimbabwe</option>
-            <option>Harare</option><option>Bulawayo</option><option>Mutare</option><option>Gweru</option><option>Masvingo</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Price range (USD)</label>
-          <div class="range-inputs">
-            <input id="priceMin" type="number" min="0" step="500" placeholder="Min" aria-label="Minimum price in US dollars">
-            <span aria-hidden="true">—</span>
-            <input id="price" type="number" min="0" step="500" placeholder="Max" aria-label="Maximum price in US dollars">
-          </div>
-        </div>
-        <button class="search-btn" id="searchBtn">Search cars</button>
-      </div>
-      <div class="search-tools-row">
-        <details class="advanced-filters" id="advancedFilters">
-          <summary><span aria-hidden="true">＋</span> More filters</summary>
-          <div class="advanced-grid">
-            <div class="field"><label for="yearMin">Year from</label><input id="yearMin" type="number" min="1950" max="2035" placeholder="Any year"></div>
-            <div class="field"><label for="yearMax">Year to</label><input id="yearMax" type="number" min="1950" max="2035" placeholder="Any year"></div>
-            <div class="field"><label for="bodyType">Body type</label><select id="bodyType"><option value="">Any body type</option><option>SUV</option><option>Pickup</option><option>Sedan</option><option>Hatchback</option><option>Van</option></select></div>
-            <div class="field"><label for="fuelType">Fuel</label><select id="fuelType"><option value="">Any fuel</option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
-            <div class="field"><label for="trans">Transmission</label><select id="trans"><option value="">Any transmission</option><option>Manual</option><option>Automatic</option></select></div>
-            <div class="field"><label for="clearanceFilter">Import status</label><select id="clearanceFilter"><option value="">Any status</option><option>Cleared</option><option>Uncleared</option></select></div>
-            <div class="field"><label for="mileageMax">Maximum mileage (km)</label><input id="mileageMax" type="number" min="0" step="10000" placeholder="Any mileage"></div>
-            <label class="verified-filter"><input id="verifiedOnly" type="checkbox"> Verified sellers only</label>
-          </div>
-        </details>
-        <div class="search-actions">
-          <button class="text-action" id="saveSearchBtn" type="button">Save this search</button>
-          <button class="text-action" id="loadSearchBtn" type="button" hidden>Load saved search</button>
-          <button class="text-action" id="resetSearchBtn" type="button">Clear filters</button>
-        </div>
-      </div>
-      <div class="quick-searches" aria-label="Popular searches">
-        <span>Popular:</span>
-        <button type="button" data-quick-search="Toyota">Toyota</button>
-        <button type="button" data-quick-search="Honda Fit">Honda Fit</button>
-        <button type="button" data-quick-search="Hilux">Hilux</button>
-        <button type="button" data-quick-search="Mazda Demio">Mazda Demio</button>
-      </div>
-    </div>
-
 
     <section class="budget-section" id="budgetPlanner">
       <div class="wrap budget-layout">
