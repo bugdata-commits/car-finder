@@ -443,6 +443,23 @@
   .compare-table tbody th{color:var(--sand-dim);font-weight:500;white-space:nowrap;}
   .compare-table td{color:var(--sand);}
   .compare-vehicle{display:flex;align-items:center;gap:10px;min-width:150px;color:var(--sand);}
+  .admin-review-queue{margin-bottom:38px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,rgba(217,132,90,.07),transparent 55%);}
+  .admin-table-wrap{overflow-x:auto;margin-bottom:12px;}
+  .admin-table{min-width:680px;}
+  .admin-table thead th{white-space:nowrap;}
+  .admin-status{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:11px;text-transform:capitalize;color:var(--sand-dim);}
+  .admin-status.pending{border-color:var(--plate-yellow);color:var(--plate-yellow);}
+  #adminReviewModal{max-width:920px;}
+  .admin-review-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:18px 0;}
+  .admin-review-photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;border:1px solid var(--line);background:var(--charcoal);}
+  .admin-review-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;margin:18px 0;}
+  .admin-review-specs div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--sand-dim);}
+  .admin-review-specs b{color:var(--sand);font-weight:500;text-align:right;}
+  .admin-review-description{padding:14px;border:1px solid var(--line);border-radius:var(--radius);color:var(--sand-dim);white-space:pre-wrap;line-height:1.6;}
+  .admin-review-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px;}
+  .admin-approve-btn{background:var(--khaki);border-color:var(--khaki);color:var(--on-brand);font-weight:700;}
+  .admin-reject-btn{border-color:var(--alert);color:var(--alert);}
+  @media(max-width:600px){.admin-review-queue{padding:14px}.admin-review-photos{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-review-specs{grid-template-columns:1fr}#adminReviewModal{padding:20px 16px}}
   .compare-vehicle img{width:72px;height:52px;object-fit:cover;border-radius:4px;flex:0 0 auto;}
   .compare-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:var(--charcoal);}
   .compare-chip button{border:0;background:none;color:var(--sand-dim);font-size:17px;line-height:1;padding:0 2px;}
@@ -925,7 +942,7 @@
     <div class="wrap page-head">
       <div class="kicker"><span class="dot"></span> Sell</div>
       <h1 id="sellPageTitle">List your car</h1>
-      <p>Takes a few minutes. Your listing goes live straight away.</p>
+      <p>Takes a few minutes. Every listing is reviewed by our team before it goes live.</p>
     </div>
     <div class="wrap" style="padding:8px 0 70px;max-width:640px;">
       <div data-auth="signed-out" class="quiz-card" style="text-align:center;">
@@ -981,7 +998,7 @@
           <input id="sPhotos" type="file" accept="image/*" multiple style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;">
         </div>
         <div id="sellError" style="color:var(--alert);font-size:13px;display:none;margin-top:6px;"></div>
-        <button type="submit" class="match-btn" id="sellSubmitBtn" style="margin-top:8px;">Publish listing</button>
+        <button type="submit" class="match-btn" id="sellSubmitBtn" style="margin-top:8px;">Submit for review</button>
       </form>
     </div>
   </div>
@@ -1033,7 +1050,21 @@
     </div>
     <div class="wrap" style="padding:8px 0 70px;">
       <div class="stat-block" id="adminStats" style="margin-bottom:34px;"></div>
-
+      <section class="admin-review-queue" aria-labelledby="pendingListingsTitle">
+        <div class="listings-head">
+          <div><h2 id="pendingListingsTitle">Pending review</h2><p class="result-count" style="margin-top:5px;">Check the vehicle details and photos before approving a listing.</p></div>
+          <div class="result-count" id="pendingListingCount">— pending</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="compare-table admin-table">
+            <thead><tr><th>Vehicle</th><th>Seller</th><th>Submitted</th><th>Price</th><th>Review</th></tr></thead>
+            <tbody id="pendingListingsBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="pendingListingsEmpty" style="display:none;margin:14px 0 36px;padding:28px;">
+          <h3>Nothing waiting for review</h3><p>New user listings will appear here before they go live.</p>
+        </div>
+      </section>
       <div class="listings-head"><h2>All listings</h2><div class="result-count" id="adminListingCount">—</div></div>
       <div style="overflow-x:auto;margin-bottom:50px;">
         <table class="compare-table" style="min-width:720px;">
@@ -1066,7 +1097,7 @@
       <div class="sell-steps">
         <div class="sell-step"><span class="n">1</span> Sign up with your name, city and WhatsApp number</div>
         <div class="sell-step"><span class="n">2</span> Add your car's details and a few photos</div>
-        <div class="sell-step"><span class="n">3</span> Your listing goes live and buyers contact you directly</div>
+        <div class="sell-step"><span class="n">3</span> Our team reviews your listing, then buyers can contact you directly</div>
       </div>
     </div>
   </section>
@@ -1118,6 +1149,9 @@
 <!-- Compare modal -->
 <div class="overlay" id="compareOverlay">
   <div class="modal" id="compareModal"></div>
+</div>
+<div class="overlay" id="adminReviewOverlay">
+  <div class="modal" id="adminReviewModal"></div>
 </div>
 
 <!-- Compare bar -->
@@ -2106,7 +2140,7 @@ on('sellForm', 'submit', async e => {
   const errEl = document.getElementById('sellError');
   errEl.style.display = 'none';
   btn.disabled = true;
-  btn.textContent = 'Publishing…';
+  btn.textContent = 'Submitting for review…';
 
   try {
     const payload = {
@@ -2137,15 +2171,17 @@ on('sellForm', 'submit', async e => {
       payload.image_urls = urls;
     }
 
+    // New listings and material edits remain invisible until an admin approves them.
+    payload.status = 'pending';
     if (editingListingId){
-      const { error } = await sb.from('listings').update(payload).eq('id', editingListingId);
+      const { error } = await sb.from('listings').update(payload).eq('id', editingListingId).eq('seller_id', currentUser.id);
       if (error) throw error;
-      showToast('Listing updated.');
+      showToast('Changes submitted for admin review.');
     } else {
       payload.seller_id = currentUser.id;
       const { error } = await sb.from('listings').insert(payload);
       if (error) throw error;
-      showToast('Listing published!');
+      showToast('Listing submitted for review. It will appear publicly after approval.');
     }
 
     await loadListings();
@@ -2155,7 +2191,7 @@ on('sellForm', 'submit', async e => {
     errEl.style.display = 'block';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Publish listing';
+    btn.textContent = 'Submit for review';
   }
 });
 
@@ -2181,6 +2217,7 @@ function renderDashboard(){
       <div class="body">
         <h3>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
         <div class="loc">${escapeHtml(c.city)} · ${daysAgo(c.created_at)}</div>
+        <div style="margin:2px 0 10px;"><span class="admin-status ${c.status === 'pending' ? 'pending' : ''}">${c.status === 'pending' ? 'Pending admin review' : escapeHtml(c.status || 'unknown')}</span></div>
         <div class="card-actions">
           <button class="btn-outline dash-edit-btn" data-id="${c.id}">Edit</button>
           <button class="btn-outline dash-sold-btn" data-id="${c.id}">${c.status === 'sold' ? 'Reactivate' : 'Mark sold'}</button>
@@ -2198,10 +2235,10 @@ function renderDashboard(){
   grid.querySelectorAll('.dash-sold-btn').forEach(btn => btn.addEventListener('click', async () => {
     const car = myListings.find(c => c.id === btn.dataset.id);
     if (!car) return;
-    const newStatus = car.status === 'sold' ? 'active' : 'sold';
-    const { error } = await sb.from('listings').update({ status: newStatus }).eq('id', car.id);
+    const newStatus = car.status === 'sold' ? 'pending' : 'sold';
+    const { error } = await sb.from('listings').update({ status: newStatus }).eq('id', car.id).eq('seller_id', currentUser.id);
     if (error) { showToast('Could not update listing'); return; }
-    showToast(newStatus === 'sold' ? 'Marked as sold' : 'Listing reactivated');
+    showToast(newStatus === 'sold' ? 'Marked as sold' : 'Resubmitted for admin review.');
     await loadMyListings();
     await loadListings();
     renderDashboard();
@@ -2224,7 +2261,7 @@ function renderDashboard(){
 async function loadAdminData(){
   if (!isAdmin) { adminListings = []; adminProfiles = []; return; }
   const [{ data: listingsData, error: listingsErr }, { data: profilesData, error: profilesErr }] = await Promise.all([
-    sb.from('listings').select('*, profiles(display_name, whatsapp_number)').order('created_at', { ascending: false }),
+    sb.from('listings').select('*, profiles(display_name, whatsapp_number, city, verified, seller_type)').order('created_at', { ascending: false }),
     sb.from('profiles').select('*').order('created_at', { ascending: false })
   ]);
   if (listingsErr) console.error('CarFinder: admin loadListings failed', listingsErr);
@@ -2236,23 +2273,39 @@ async function loadAdminData(){
 function renderAdminDashboard(){
   const statsEl = document.getElementById('adminStats');
   if (!statsEl) return;
+  const pending = adminListings.filter(l => l.status === 'pending');
   const activeCount = adminListings.filter(l => l.status === 'active').length;
   statsEl.innerHTML = `
-    <div><b>${adminListings.length}</b><span>total listings</span></div>
-    <div><b>${activeCount}</b><span>active</span></div>
+    <div><b>${pending.length}</b><span>awaiting review</span></div>
+    <div><b>${activeCount}</b><span>live listings</span></div>
     <div><b>${adminProfiles.length}</b><span>sellers</span></div>`;
+
+  const pendingBody = document.getElementById('pendingListingsBody');
+  const pendingCount = document.getElementById('pendingListingCount');
+  const pendingEmpty = document.getElementById('pendingListingsEmpty');
+  if (pendingCount) pendingCount.textContent = `${pending.length} pending`;
+  if (pendingBody) pendingBody.innerHTML = pending.map(c => `
+    <tr>
+      <td><b>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b><br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.city || '—')} · ${fmtMileage(c.mileage)}</span></td>
+      <td>${c.profiles ? escapeHtml(c.profiles.display_name || '—') : '—'}</td>
+      <td>${daysAgo(c.created_at)}</td>
+      <td>${fmtPrice(c.price)}</td>
+      <td><button type="button" class="btn-outline admin-review-btn" data-id="${escapeHtml(c.id)}" style="padding:7px 12px;">Review</button></td>
+    </tr>`).join('');
+  if (pendingEmpty) pendingEmpty.style.display = pending.length ? 'none' : 'block';
 
   document.getElementById('adminListingCount').textContent = adminListings.length + ' listings';
   document.getElementById('adminListingsBody').innerHTML = adminListings.map(c => `
     <tr>
-      <td>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)} · ${fmtPrice(c.price)}</td>
+      <td>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)} · ${fmtPrice(c.price)}</td>
       <td>${c.profiles ? escapeHtml(c.profiles.display_name) : '—'}</td>
-      <td style="text-transform:capitalize;${c.status === 'removed' ? 'color:var(--alert);' : ''}">${escapeHtml(c.status)}</td>
+      <td><span class="admin-status ${c.status === 'pending' ? 'pending' : ''}">${escapeHtml(c.status || 'unknown')}</span></td>
       <td>${c.featured ? '★' : '—'}</td>
       <td>
-        <button class="btn-outline admin-remove-btn" data-id="${c.id}" style="padding:5px 10px;font-size:12px;${c.status === 'removed' ? 'display:none;' : ''}">Remove</button>
-        <button class="btn-outline admin-restore-btn" data-id="${c.id}" style="padding:5px 10px;font-size:12px;${c.status !== 'removed' ? 'display:none;' : ''}">Restore</button>
-        <button class="btn-outline admin-feature-btn" data-id="${c.id}" style="padding:5px 10px;font-size:12px;">${c.featured ? 'Unfeature' : 'Feature'}</button>
+        ${c.status === 'pending' ? `<button class="btn-outline admin-review-btn" data-id="${escapeHtml(c.id)}" style="padding:5px 10px;font-size:12px;">Review</button>` : ''}
+        <button class="btn-outline admin-remove-btn" data-id="${escapeHtml(c.id)}" style="padding:5px 10px;font-size:12px;${c.status === 'removed' ? 'display:none;' : ''}">Remove</button>
+        <button class="btn-outline admin-restore-btn" data-id="${escapeHtml(c.id)}" style="padding:5px 10px;font-size:12px;${c.status !== 'removed' ? 'display:none;' : ''}">Restore</button>
+        <button class="btn-outline admin-feature-btn" data-id="${escapeHtml(c.id)}" style="padding:5px 10px;font-size:12px;">${c.featured ? 'Unfeature' : 'Feature'}</button>
       </td>
     </tr>`).join('');
 
@@ -2264,11 +2317,12 @@ function renderAdminDashboard(){
       <td>${p.verified ? '✓' : '—'}</td>
       <td style="${p.suspended ? 'color:var(--alert);' : ''}">${p.suspended ? 'Suspended' : '—'}</td>
       <td>
-        <button class="btn-outline admin-verify-btn" data-id="${p.id}" style="padding:5px 10px;font-size:12px;">${p.verified ? 'Unverify' : 'Verify'}</button>
-        <button class="btn-outline admin-suspend-btn" data-id="${p.id}" style="padding:5px 10px;font-size:12px;${p.suspended ? 'color:var(--khaki);border-color:var(--khaki);' : 'color:var(--alert);border-color:var(--alert);'}">${p.suspended ? 'Unsuspend' : 'Suspend'}</button>
+        <button class="btn-outline admin-verify-btn" data-id="${escapeHtml(p.id)}" style="padding:5px 10px;font-size:12px;">${p.verified ? 'Unverify' : 'Verify'}</button>
+        <button class="btn-outline admin-suspend-btn" data-id="${escapeHtml(p.id)}" style="padding:5px 10px;font-size:12px;${p.suspended ? 'color:var(--khaki);border-color:var(--khaki);' : 'color:var(--alert);border-color:var(--alert);'}">${p.suspended ? 'Unsuspend' : 'Suspend'}</button>
       </td>
     </tr>`).join('');
 
+  document.querySelectorAll('.admin-review-btn').forEach(btn => btn.addEventListener('click', () => openAdminListingReview(btn.dataset.id)));
   document.querySelectorAll('.admin-remove-btn').forEach(btn => btn.addEventListener('click', () => adminSetListingStatus(btn.dataset.id, 'removed')));
   document.querySelectorAll('.admin-restore-btn').forEach(btn => btn.addEventListener('click', () => adminSetListingStatus(btn.dataset.id, 'active')));
   document.querySelectorAll('.admin-feature-btn').forEach(btn => btn.addEventListener('click', () => adminToggleFeatured(btn.dataset.id)));
@@ -2276,14 +2330,60 @@ function renderAdminDashboard(){
   document.querySelectorAll('.admin-suspend-btn').forEach(btn => btn.addEventListener('click', () => adminToggleProfileFlag(btn.dataset.id, 'suspended')));
 }
 
+function openAdminListingReview(id){
+  if (!isAdmin) return;
+  const car = adminListings.find(item => String(item.id) === String(id));
+  if (!car) { showToast('Listing is no longer available for review'); return; }
+  const seller = car.profiles || {};
+  const photos = Array.isArray(car.image_urls) ? car.image_urls.filter(Boolean).slice(0,6) : [];
+  const photoMarkup = photos.length
+    ? photos.map((url,i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(car.year)} ${escapeHtml(car.make)} ${escapeHtml(car.model)} photo ${i+1}" loading="lazy">`).join('')
+    : '<p style="color:var(--sand-dim);">No photos submitted.</p>';
+  const info = [
+    ['Price',fmtPrice(car.price)],['Year',car.year],['Mileage',fmtMileage(car.mileage)],['City',car.city],
+    ['Transmission',car.transmission],['Fuel',car.fuel],['Clearance',car.clearance],['Category',car.category],
+    ['Seller',seller.display_name || '—'],['Seller WhatsApp',seller.whatsapp_number || '—'],['Seller type',seller.seller_type || '—'],['Submitted',car.created_at ? new Date(car.created_at).toLocaleString() : '—']
+  ];
+  const overlay=document.getElementById('adminReviewOverlay');
+  document.getElementById('adminReviewModal').innerHTML=`
+    <button class="modal-close" id="adminReviewClose" aria-label="Close">&times;</button>
+    <div class="kicker"><span class="dot" style="background:var(--plate-yellow);"></span> Pending listing review</div>
+    <h2 style="margin-top:9px;">${escapeHtml(car.year)} ${escapeHtml(car.make)} ${escapeHtml(car.model)}</h2>
+    <div class="admin-review-photos">${photoMarkup}</div>
+    <div class="admin-review-specs">${info.map(([label,value])=>`<div><span>${escapeHtml(label)}</span><b>${escapeHtml(value ?? '—')}</b></div>`).join('')}</div>
+    <h3 style="font-size:14px;margin:18px 0 8px;">Seller description</h3>
+    <div class="admin-review-description">${escapeHtml(car.description || 'No description provided.')}</div>
+    <div class="admin-review-actions">
+      <button type="button" class="btn-outline admin-reject-btn" id="adminRejectListing">Reject listing</button>
+      <button type="button" class="search-btn admin-approve-btn" id="adminApproveListing">Approve and publish</button>
+    </div>`;
+  document.getElementById('adminReviewClose').addEventListener('click',()=>overlay.classList.remove('open'));
+  document.getElementById('adminApproveListing').addEventListener('click',()=>adminModeratePendingListing(car.id,'active'));
+  document.getElementById('adminRejectListing').addEventListener('click',()=>adminModeratePendingListing(car.id,'rejected'));
+  overlay.classList.add('open');
+}
+on(document.getElementById('adminReviewOverlay'),'click',e=>{if(e.target.id==='adminReviewOverlay')e.currentTarget.classList.remove('open');});
+
+async function adminModeratePendingListing(id, nextStatus){
+  if (!isAdmin) { showToast('Admin access required'); return; }
+  if (!['active','rejected'].includes(nextStatus)) return;
+  const { data, error } = await sb.from('listings').update({ status: nextStatus }).eq('id', id).eq('status','pending').select('id').maybeSingle();
+  if (error) { console.error('CarFinder: pending moderation failed',error); showToast('Could not update listing — check admin permissions'); return; }
+  if (!data) { showToast('This listing is no longer pending. Refreshing the queue.'); }
+  else showToast(nextStatus === 'active' ? 'Listing approved and published.' : 'Listing rejected and kept off the marketplace.');
+  document.getElementById('adminReviewOverlay').classList.remove('open');
+  await loadAdminData(); renderAdminDashboard();
+  await loadListings();
+}
+
 async function adminSetListingStatus(id, status){
+  if (!isAdmin) { showToast('Admin access required'); return; }
   const { error } = await sb.from('listings').update({ status }).eq('id', id);
   if (error) { showToast('Action failed — check permissions'); return; }
   showToast(status === 'removed' ? 'Listing removed' : 'Listing restored');
   await loadAdminData(); renderAdminDashboard();
   await loadListings();
 }
-
 async function adminToggleFeatured(id){
   const current = adminListings.find(l => l.id === id);
   const { error } = await sb.from('listings').update({ featured: !(current && current.featured) }).eq('id', id);
