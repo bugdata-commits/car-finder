@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CarFinder">
+  <rect width="64" height="64" rx="10" fill="#0b4ea2"/>
+  <path d="M11 38.5 15.2 28c.9-2.2 2.7-3.5 5-3.5h22.3c2.2 0 4.1 1.1 5.2 3.2L53 38.5v10H11z" fill="#fff"/>
+  <path d="m20.4 28.8-3.1 7.5h29.5l-3.8-7.5c-.3-.6-.9-.9-1.6-.9H21.9c-.7 0-1.2.3-1.5.9z" fill="#b8d6f7"/>
+  <circle cx="21" cy="47" r="5.3" fill="#0f1b2d"/><circle cx="21" cy="47" r="2.2" fill="#ffc400"/>
+  <circle cx="44" cy="47" r="5.3" fill="#0f1b2d"/><circle cx="44" cy="47" r="2.2" fill="#ffc400"/>
+</svg>
