@@ -6,11 +6,12 @@
 <title>CarFinder — Cars for sale in Zimbabwe</title>
 <meta name="description" content="CarFinder — browse cars for sale in Harare, Bulawayo, Mutare and across Zimbabwe.">
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://eeodzwzxpquqwtvccqab.supabase.co; connect-src 'self' https://eeodzwzxpquqwtvccqab.supabase.co; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://eeodzwzxpquqwtvccqab.supabase.co; connect-src 'self' https://eeodzwzxpquqwtvccqab.supabase.co; form-action 'self'; upgrade-insecure-requests">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- Keep core app functionality independent of third-party CDN availability. -->
+<script src="./vendor/supabase-2.118.0.js"></script>
 <style>
   :root{
     --charcoal:#ffffff;
