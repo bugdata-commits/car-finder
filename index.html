@@ -686,6 +686,20 @@
     .grid{grid-template-columns:1fr;}
   }
 
+  /* ---------- supplied CarFinder campaign hero ---------- */
+  .hero{padding:0 0 34px;background:linear-gradient(120deg,#0b4ea2 0%,#083b7a 100%);border:0;color:#fff;}
+  .hero-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  .hero-banner{position:relative;width:100%;line-height:0;background:#e7f2ff;overflow:hidden;}
+  .hero-banner img{display:block;width:100%;height:auto;max-width:1920px;margin:0 auto;aspect-ratio:1672/941;}
+  .hero-image-search{position:absolute;right:2.9%;bottom:10.6%;width:26%;height:8%;min-height:44px;display:block;border-radius:999px;color:transparent;text-decoration:none;}
+  .hero-image-search:focus-visible{outline:3px solid #ffc400;outline-offset:4px;background:rgba(255,255,255,.12);}
+  .hero .search-panel{margin-top:26px;}
+  @media(max-width:560px){
+    .hero{padding-bottom:26px;}
+    .hero-image-search{right:2.6%;bottom:10%;width:28%;height:11%;}
+    .hero .search-panel{margin-top:18px;}
+  }
+
 
   /* ---------- centered brand header ---------- */
   .nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center;}
@@ -757,12 +771,12 @@
   <!-- ================= HOME PAGE ================= -->
   <div class="page" id="page-home">
     <section class="hero">
-      <div class="wrap hero-copy">
-        <div class="eyebrow-line"><span class="dot"></span> Zimbabwe’s local car marketplace</div>
-        <h1>Find a car that fits your life and your budget.</h1>
-        <p class="lede">Explore cars from dealers and private sellers across Zimbabwe. Compare the details that matter, then contact the seller directly.</p>
+      <h1 class="hero-sr-only">Find a car that fits your life and your budget.</h1>
+      <div class="hero-banner">
+        <img src="./assets/carfinder-hero.webp" width="1672" height="941" fetchpriority="high" alt="CarFinder campaign banner: More than just a car, it’s a better tomorrow. Safe journeys, happy families, lasting memories.">
+        <a class="hero-image-search" href="#heroSearchPanel" aria-label="Search cars now"></a>
       </div>
-      <div class="wrap search-panel">
+      <div class="wrap search-panel" id="heroSearchPanel">
         <div class="search-card search-card-pro">
           <div class="field search-query-field">
             <label for="q">Make, model or keyword</label>
@@ -1481,15 +1495,6 @@ on(document, 'click', e => {
   e.preventDefault();
   showPage(el.dataset.view, el.dataset.slug);
 });
-
-// If this page is ever opened with an existing #/... hash (e.g. a real hosted
-// link someone shared), honor it once on load — but nothing above depends on this.
-(function initFromHash(){
-  const hash = location.hash || '';
-  if (!hash.startsWith('#/')) return;
-  const parts = hash.replace('#/', '').split('/');
-  showPage(parts[0] || 'home', decodeURIComponent(parts[1] || ''));
-})();
 
 function scrollToId(id){
   const el = document.getElementById(id);
@@ -2573,7 +2578,15 @@ try { renderListings(); } catch (e) { console.error('CarFinder: renderListings f
 try { renderBlogList(); } catch (e) { console.error('CarFinder: renderBlogList failed', e); }
 try { renderBlogTeaser(); } catch (e) { console.error('CarFinder: renderBlogTeaser failed', e); }
 try { refreshAuthUI(); } catch (e) { console.error('CarFinder: refreshAuthUI failed', e); }
-try { showPage('home'); } catch (e) { console.error('CarFinder: showPage failed', e); }
+try {
+  const initialHash = location.hash || '';
+  if (initialHash.startsWith('#/')){
+    const routeParts = initialHash.replace('#/', '').split('/');
+    showPage(routeParts[0] || 'home', decodeURIComponent(routeParts[1] || ''));
+  } else {
+    showPage('home');
+  }
+} catch (e) { console.error('CarFinder: initial route failed', e); showPage('home'); }
 loadListings().catch(e => console.error('CarFinder: initial loadListings failed', e));
 </script>
 
