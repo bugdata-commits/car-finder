@@ -2387,7 +2387,7 @@ async function loadAdminData(){
     { data: profilesData, error: profilesErr },
     { data: analyticsData, error: analyticsErr }
   ] = await Promise.all([
-    sb.from('listings').select('*, profiles(display_name, whatsapp_number, city, verified, seller_type)').order('created_at', { ascending: false }),
+    sb.from('listings').select('*, profiles!listings_seller_id_fkey(display_name, whatsapp_number, city, verified, seller_type)').order('created_at', { ascending: false }),
     sb.from('profiles').select('*').order('created_at', { ascending: false }),
     sb.rpc('get_listing_review_analytics')
   ]);

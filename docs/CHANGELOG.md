@@ -13,3 +13,8 @@ Signed-out visitors can open a direct `#/favorites` URL and see a sign-in-requir
 ## Earlier work
 
 See the marketplace handoff documents for the saved-cars, comparison, budget-planner, review analytics, CSV exports, and original deployment history.
+
+
+## 2026-10-21 — Admin pending queue query fix
+
+The admin listing loader now explicitly joins `profiles` through `listings_seller_id_fkey`. This resolves PostgREST `PGRST201` (“more than one relationship was found”) caused by the previous unqualified profiles embed, which prevented the pending review rows from loading while analytics still showed the pending count.
