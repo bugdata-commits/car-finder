@@ -1520,10 +1520,6 @@ function showPage(page, param){
     showToast('Sign in to see your listings');
     active = 'sell';
   }
-  if (active === 'favorites' && !currentUser){
-    showToast('Sign in to see your saved cars');
-    active = 'sell';
-  }
   // admin requires an actual admins-table row — never trust just "signed in" here
   if (active === 'admin' && !isAdmin){
     showToast(currentUser ? 'Your account does not have admin access' : 'Sign in with an admin account first');
