@@ -468,6 +468,8 @@
   .admin-review-queue{margin-bottom:38px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,rgba(217,132,90,.07),transparent 55%);}
   .admin-table-wrap{overflow-x:auto;margin-bottom:12px;}
   .admin-table{min-width:680px;}
+  .pending-review-table td:last-child button{min-width:88px;min-height:44px;}
+  .admin-retry-load{min-height:44px;margin-top:14px;padding:9px 16px;}
   .admin-table thead th{white-space:nowrap;}
   .admin-status{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:11px;text-transform:capitalize;color:var(--sand-dim);}
   .admin-status.pending{border-color:var(--plate-yellow);color:var(--plate-yellow);}
@@ -479,9 +481,25 @@
   .admin-review-specs b{color:var(--sand);font-weight:500;text-align:right;}
   .admin-review-description{padding:14px;border:1px solid var(--line);border-radius:var(--radius);color:var(--sand-dim);white-space:pre-wrap;line-height:1.6;}
   .admin-review-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px;}
+  .admin-review-actions button{min-width:150px;min-height:46px;}
   .admin-approve-btn{background:var(--khaki);border-color:var(--khaki);color:var(--on-brand);font-weight:700;}
   .admin-reject-btn{border-color:var(--alert);color:var(--alert);}
   @media(max-width:600px){.admin-review-queue{padding:14px}.admin-review-photos{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-review-specs{grid-template-columns:1fr}#adminReviewModal{padding:20px 16px}}
+  @media(max-width:760px){
+    .pending-review-wrap{overflow:visible;}
+    .pending-review-table,.pending-review-table tbody{display:block;width:100%;min-width:0;}
+    .pending-review-table thead{display:none;}
+    .pending-review-table tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px;margin:0 0 12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(8,26,54,.54);}
+    .pending-review-table td{display:block;padding:0;border:0;font-size:13px;}
+    .pending-review-table td:first-child{grid-column:1/-1;font-size:15px;}
+    .pending-review-table td:nth-child(2)::before{content:'Seller: ';color:var(--sand-dim);}
+    .pending-review-table td:nth-child(3)::before{content:'Submitted: ';color:var(--sand-dim);}
+    .pending-review-table td:nth-child(4)::before{content:'Price: ';color:var(--sand-dim);}
+    .pending-review-table td:last-child{grid-column:1/-1;margin-top:3px;}
+    .pending-review-table td:last-child button{width:100%;min-height:48px;font-size:14px;}
+    .admin-review-actions{justify-content:stretch;}
+    .admin-review-actions button{flex:1 1 100%;}
+  }
   .compare-vehicle img{width:72px;height:52px;object-fit:cover;border-radius:4px;flex:0 0 auto;}
   .compare-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:var(--charcoal);}
   .compare-chip button{border:0;background:none;color:var(--sand-dim);font-size:17px;line-height:1;padding:0 2px;}
@@ -666,7 +684,7 @@
   .card .spec-row{gap:8px;flex-wrap:wrap;}
   .card-actions{gap:7px;}
   .card .btn-outline,.card .btn-whatsapp{border-radius:6px;}
-  @media(max-width:1020px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  @media(max-width:1180px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
   @media(max-width:860px){
     .hero{padding:46px 0 30px;}
     .hero .search-card-pro{grid-template-columns:1fr 1fr;}
@@ -1031,7 +1049,7 @@
         </div>
         <div class="quiz-field">
           <label for="sPhotos">Photos (up to 6)</label>
-          <input id="sPhotos" type="file" accept="image/*" multiple style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;">
+          <input id="sPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;">
         </div>
         <div id="sellError" style="color:var(--alert);font-size:13px;display:none;margin-top:6px;"></div>
         <button type="submit" class="match-btn" id="sellSubmitBtn" style="margin-top:8px;">Submit for review</button>
@@ -1103,8 +1121,8 @@
           <div><h2 id="pendingListingsTitle">Pending review</h2><p class="result-count" style="margin-top:5px;">Check the vehicle details and photos before approving a listing.</p></div>
           <div class="result-count" id="pendingListingCount">— pending</div>
         </div>
-        <div class="admin-table-wrap">
-          <table class="compare-table admin-table">
+        <div class="admin-table-wrap pending-review-wrap">
+          <table class="compare-table admin-table pending-review-table">
             <thead><tr><th>Vehicle</th><th>Seller</th><th>Submitted</th><th>Price</th><th>Review</th></tr></thead>
             <tbody id="pendingListingsBody"></tbody>
           </table>
@@ -1327,6 +1345,7 @@ let isAdmin = false;         // true only if currentUser has a row in public.adm
 let adminListings = [];      // every listing, any status — admin view only
 let adminProfiles = [];      // every seller profile — admin view only
 let adminReviewAnalytics = null; // audit-backed counts from the admin-only RPC
+let adminListingsLoadFailed = false;
 
 /* ============ HELPERS ============ */
 function on(target, event, handler){
@@ -1373,6 +1392,50 @@ function fmtPrice(n){ return '$' + Number(n).toLocaleString('en-US'); }
 function fmtMileage(n){ return Number(n).toLocaleString('en-US') + ' km'; }
 function carById(id){ return listings.find(c => c.id === id) || myListings.find(c => c.id === id); }
 function carPhoto(car){ return (car.image_urls && car.image_urls[0]) ? car.image_urls[0] : PLACEHOLDER_IMG; }
+const signedPhotoCache = new Map();
+function listingPhotoObjectPath(value){
+  if (typeof value !== 'string' || !value.trim() || /^(data|blob):/i.test(value)) return null;
+  const source = value.trim();
+  if (/^https?:\/\//i.test(source) || source.startsWith('/')){
+    try {
+      const pathname = new URL(source, location.href).pathname;
+      for (const marker of ['/storage/v1/object/public/listing-photos/', '/storage/v1/object/sign/listing-photos/']){
+        const at = pathname.indexOf(marker);
+        if (at >= 0){
+          const path = pathname.slice(at + marker.length);
+          return decodeURIComponent(path);
+        }
+      }
+    } catch (e) { /* preserve non-storage URLs as external images */ }
+    return null;
+  }
+  return source;
+}
+async function signListingPhotos(cars){
+  const rows = (cars || []).map(car => {
+    const sources = Array.isArray(car.image_urls) ? car.image_urls : [];
+    const savedPaths = Array.isArray(car.__photoPaths) ? car.__photoPaths : [];
+    return { car, sources, paths: sources.map((url,i) => savedPaths[i] || listingPhotoObjectPath(url)) };
+  });
+  const uniquePaths = [...new Set(rows.flatMap(row => row.paths.filter(Boolean)))];
+  const now = Date.now();
+  const needed = uniquePaths.filter(path => !signedPhotoCache.has(path) || signedPhotoCache.get(path).expiresAt <= now + 60000);
+  for (let offset = 0; offset < needed.length; offset += 100){
+    const batch = needed.slice(offset, offset + 100);
+    const { data, error } = await sb.storage.from('listing-photos').createSignedUrls(batch, 3600);
+    const results = Array.isArray(data) ? data : (data && Array.isArray(data.signedUrls) ? data.signedUrls : []);
+    if (error) console.warn('CarFinder: could not sign listing photos', error);
+    batch.forEach((path,i) => {
+      const result = results.find(item => item.path === path) || results[i];
+      signedPhotoCache.set(path, { url: !error && result && result.signedUrl ? result.signedUrl : PLACEHOLDER_IMG, expiresAt: Date.now() + (error ? 30000 : 3540000) });
+    });
+  }
+  return rows.map(({car,sources,paths}) => ({
+    ...car,
+    __photoPaths: paths,
+    image_urls: sources.map((url,i) => paths[i] ? signedPhotoCache.get(paths[i]).url : url)
+  }));
+}
 function daysAgo(iso){
   const diff = Date.now() - new Date(iso).getTime();
   const d = Math.max(0, Math.floor(diff / 86400000));
@@ -1705,7 +1768,7 @@ async function loadListings(){
     showToast('Could not load listings — check your connection');
     listings = [];
   } else {
-    listings = data || [];
+    listings = await signListingPhotos(data || []);
   }
   listingsLoaded = true;
   compareSelection = compareSelection.filter(id => listings.some(car => String(car.id) === String(id))).slice(0, 3);
@@ -1722,7 +1785,7 @@ async function loadMyListings(){
     .eq('seller_id', currentUser.id)
     .order('created_at', { ascending: false });
   if (error) { console.error('CarFinder: loadMyListings failed', error); myListings = []; return; }
-  myListings = data || [];
+  myListings = await signListingPhotos(data || []);
 }
 
 /* ============ HOME / LISTINGS ============ */
@@ -2218,15 +2281,18 @@ on('sellForm', 'submit', async e => {
     };
 
     const fileInput = document.getElementById('sPhotos');
-    const files = Array.from(fileInput.files || []).slice(0, 6);
+    const files = Array.from(fileInput.files || []);
+    const allowedPhotoTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    if (files.length > 6) throw new Error('Please select no more than 6 photos.');
+    if (files.some(file => !allowedPhotoTypes.has(file.type))) throw new Error('Photos must be JPEG, PNG, or WebP images.');
+    if (files.some(file => file.size > 10 * 1024 * 1024)) throw new Error('Each photo must be 10 MB or smaller.');
     if (files.length){
       const urls = [];
       for (const file of files){
         const path = `${currentUser.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g,'_')}`;
         const { error: upErr } = await sb.storage.from('listing-photos').upload(path, file);
         if (upErr) throw upErr;
-        const { data: pub } = sb.storage.from('listing-photos').getPublicUrl(path);
-        urls.push(pub.publicUrl);
+        urls.push(path);
       }
       payload.image_urls = urls;
     }
@@ -2319,7 +2385,7 @@ function renderDashboard(){
 // "Admins can update any profile" RLS policies allow it for this specific
 // signed-in user — there is no client-side check doing the real gatekeeping.
 async function loadAdminData(){
-  if (!isAdmin) { adminListings = []; adminProfiles = []; adminReviewAnalytics = null; return; }
+  if (!isAdmin) { adminListings = []; adminProfiles = []; adminReviewAnalytics = null; adminListingsLoadFailed = false; return; }
   const [
     { data: listingsData, error: listingsErr },
     { data: profilesData, error: profilesErr },
@@ -2332,7 +2398,8 @@ async function loadAdminData(){
   if (listingsErr) console.error('CarFinder: admin loadListings failed', listingsErr);
   if (profilesErr) console.error('CarFinder: admin loadProfiles failed', profilesErr);
   if (analyticsErr) console.error('CarFinder: admin loadReviewAnalytics failed', analyticsErr);
-  adminListings = listingsData || [];
+  adminListings = await signListingPhotos(listingsData || []);
+  adminListingsLoadFailed = Boolean(listingsErr);
   adminProfiles = profilesData || [];
   adminReviewAnalytics = analyticsData || null;
 }
@@ -2370,13 +2437,27 @@ function renderAdminDashboard(){
   if (pendingCount) pendingCount.textContent = `${pending.length} pending`;
   if (pendingBody) pendingBody.innerHTML = pending.map(c => `
     <tr>
-      <td><b>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b><br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.city || '—')} · ${fmtMileage(c.mileage)}</span></td>
-      <td>${c.profiles ? escapeHtml(c.profiles.display_name || '—') : '—'}</td>
-      <td>${daysAgo(c.created_at)}</td>
-      <td>${fmtPrice(c.price)}</td>
-      <td><button type="button" class="btn-outline admin-review-btn" data-id="${escapeHtml(c.id)}" style="padding:7px 12px;">Review</button></td>
+      <td data-label="Vehicle"><b>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b><br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.city || '—')} · ${fmtMileage(c.mileage)}</span></td>
+      <td data-label="Seller">${c.profiles ? escapeHtml(c.profiles.display_name || '—') : '—'}</td>
+      <td data-label="Submitted">${daysAgo(c.created_at)}</td>
+      <td data-label="Price">${fmtPrice(c.price)}</td>
+      <td data-label="Review"><button type="button" class="btn-outline admin-review-btn" data-id="${escapeHtml(c.id)}" aria-label="Review ${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}" style="padding:7px 12px;">Review listing</button></td>
     </tr>`).join('');
-  if (pendingEmpty) pendingEmpty.style.display = pending.length ? 'none' : 'block';
+  if (pendingEmpty){
+    if (adminListingsLoadFailed){
+      pendingEmpty.innerHTML = '<h3>Pending listings could not be loaded</h3><p>Please retry the admin listing query. The pending count may still be available from analytics.</p><button type="button" class="btn-outline admin-retry-load" id="adminRetryPendingLoad">Try again</button>';
+      pendingEmpty.style.display = 'block';
+      document.getElementById('adminRetryPendingLoad').addEventListener('click', async e => {
+        e.currentTarget.disabled = true;
+        e.currentTarget.textContent = 'Loading…';
+        await loadAdminData();
+        renderAdminDashboard();
+      });
+    } else {
+      pendingEmpty.innerHTML = '<h3>Nothing waiting for review</h3><p>New user listings will appear here before they go live.</p>';
+      pendingEmpty.style.display = pending.length ? 'none' : 'block';
+    }
+  }
 
   document.getElementById('adminListingCount').textContent = adminListings.length + ' listings';
   document.getElementById('adminListingsBody').innerHTML = adminListings.map(c => `
@@ -2469,6 +2550,7 @@ async function adminSetListingStatus(id, status){
   await loadListings();
 }
 async function adminToggleFeatured(id){
+  if (!isAdmin) { showToast('Admin access required'); return; }
   const current = adminListings.find(l => l.id === id);
   const { error } = await sb.from('listings').update({ featured: !(current && current.featured) }).eq('id', id);
   if (error) { showToast('Action failed — check permissions'); return; }
@@ -2476,6 +2558,7 @@ async function adminToggleFeatured(id){
 }
 
 async function adminToggleProfileFlag(id, field){
+  if (!isAdmin || !['verified','suspended'].includes(field)) { showToast('Admin access required'); return; }
   const current = adminProfiles.find(p => p.id === id);
   const { error } = await sb.from('profiles').update({ [field]: !(current && current[field]) }).eq('id', id);
   if (error) { showToast('Action failed — check permissions'); return; }
