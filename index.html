@@ -6,7 +6,9 @@
 <title>CarFinder — Cars for sale and rent in Zimbabwe</title>
 <meta name="description" content="CarFinder — browse cars for sale or rent in Harare, Bulawayo, Mutare and across Zimbabwe.">
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://eeodzwzxpquqwtvccqab.supabase.co; connect-src 'self' https://eeodzwzxpquqwtvccqab.supabase.co; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://eeodzwzxpquqwtvccqab.supabase.co; connect-src 'self' https://eeodzwzxpquqwtvccqab.supabase.co; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1095,6 +1097,11 @@
           <label for="sPhotos">Photos (up to 6)</label>
           <input id="sPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;">
         </div>
+        <label class="privacy-consent" style="display:flex;gap:9px;align-items:flex-start;color:var(--sand-dim);font-size:12.5px;line-height:1.45;margin-top:10px;">
+          <input id="sellerPolicyConsent" type="checkbox" required style="margin-top:3px;">
+          <span>I confirm that this information is accurate, I have the right to list this vehicle, and I agree to the <a href="#" data-view="terms">Terms &amp; Conditions</a> and <a href="#" data-view="privacy">Privacy Policy</a>. I will not include passwords, national ID numbers, payment-card details, or other sensitive information in the listing.</span>
+        </label>
+        <p style="color:var(--sand-dim);font-size:12px;margin:8px 0 0;">Never send a deposit or share a one-time password because someone claims to be a CarFinder representative. Meet safely and verify documents independently.</p>
         <div id="sellError" style="color:var(--alert);font-size:13px;display:none;margin-top:6px;"></div>
         <button type="submit" class="match-btn" id="sellSubmitBtn" style="margin-top:8px;">Submit for review</button>
       </form>
@@ -1193,6 +1200,90 @@
     </div>
   </div>
 
+  <!-- ================= TERMS PAGE ================= -->
+  <div class="page" id="page-terms" hidden>
+    <div class="wrap page-head">
+      <div class="kicker"><span class="dot"></span> Legal</div>
+      <h1>Terms &amp; Conditions</h1>
+      <p>Effective date: 24 October 2026 · Please read these terms before using CarFinder.</p>
+    </div>
+    <article class="wrap policy-page" style="padding:8px 0 70px;max-width:900px;">
+      <p>These Terms &amp; Conditions govern your use of CarFinder, a Zimbabwe-focused marketplace that helps people discover vehicles and contact sellers. By browsing the site, creating an account, saving a listing, or submitting a listing, you agree to these terms. If you do not agree, do not use the service.</p>
+      <h2>1. What CarFinder does</h2>
+      <p>CarFinder provides search, listing, messaging and moderation tools. CarFinder is not the seller, buyer, owner, broker, insurer, financier, mechanic, transporter or agent for any vehicle unless we expressly say so in writing. A listing is an advertisement supplied by a user and is not an offer or guarantee from CarFinder.</p>
+      <h2>2. Accounts and accurate information</h2>
+      <p>You must provide information that is accurate, current and not misleading. Keep your password private, use a unique password, and tell us promptly if you suspect unauthorised access. You are responsible for activity performed through your account. We may require confirmation, suspend access, or remove content where information is false, unsafe, unlawful or breaches these terms.</p>
+      <h2>3. Listings and transactions</h2>
+      <p>Sellers must have the right to advertise the vehicle and must describe its condition, ownership, mileage, import or clearance status, price, rental terms and photographs honestly. Sellers must not upload another person’s personal information, forged documents, stolen images, malware, or content that infringes another person’s rights.</p>
+      <p>CarFinder does not verify title, roadworthiness, mileage, identity, availability, ownership, pricing, import status or the truth of every statement in a listing. Before paying or signing anything, independently inspect the vehicle, verify the seller and documents, confirm the total cost, and obtain professional or official advice where appropriate. Never send money, a password, a one-time code or identity documents merely because a message appears to come from CarFinder.</p>
+      <h2>4. Rental listings</h2>
+      <p>Rental rates and periods are supplied by the rental provider. Confirm deposits, insurance, mileage limits, fuel rules, driver requirements, cancellation rules, damage responsibility and collection arrangements directly with the provider before committing. CarFinder is not a party to the rental agreement.</p>
+      <h2>5. Acceptable use</h2>
+      <p>You must not scrape the service, probe or bypass access controls, upload harmful code, impersonate another person, harass users, manipulate reviews, send spam, use the service for fraud, or use contact details for unrelated marketing. We may moderate, reject, hide or remove content and may preserve information where necessary for safety, legal compliance or dispute handling.</p>
+      <h2>6. User content</h2>
+      <p>You retain ownership of content you submit. You give CarFinder a non-exclusive, worldwide, royalty-free licence to host, reproduce, resize, display and distribute that content for operating, moderating and promoting the service. You confirm that you have the rights needed to grant this licence. We may remove content when required by law, a rights-holder request, or a safety decision.</p>
+      <h2>7. External services</h2>
+      <p>Links and buttons may open services such as WhatsApp, email, Supabase-hosted resources or other third-party websites. Those services have their own terms and privacy practices. CarFinder does not control or guarantee third-party availability, security or content.</p>
+      <h2>8. Availability and liability</h2>
+      <p>We aim to keep CarFinder available and secure, but the service may be changed, interrupted or unavailable. To the maximum extent allowed by law, CarFinder is provided without guarantees that listings are accurate, complete, current, safe or suitable for a particular purpose. Nothing in these terms excludes liability that cannot lawfully be excluded, including liability for fraud or deliberate misconduct.</p>
+      <h2>9. Changes and termination</h2>
+      <p>We may update these terms as the service or law changes. The latest version will appear on this page with a new effective date. We may suspend or close accounts and remove listings when reasonably necessary for security, legal compliance, abuse prevention or protection of users.</p>
+      <h2>10. Governing law and contact</h2>
+      <p>These terms are governed by the laws of Zimbabwe, subject to any mandatory rights you have under applicable law. Questions or complaints can be sent to <a href="mailto:hello@carfinder.co.zw">hello@carfinder.co.zw</a>. This document is a practical website draft and should be reviewed by a Zimbabwe-qualified lawyer before being relied on as the business's final legal contract.</p>
+    </article>
+  </div>
+
+  <!-- ================= PRIVACY PAGE ================= -->
+  <div class="page" id="page-privacy" hidden>
+    <div class="wrap page-head">
+      <div class="kicker"><span class="dot"></span> Privacy</div>
+      <h1>Privacy Policy</h1>
+      <p>Effective date: 24 October 2026 · How CarFinder collects, uses and protects personal information.</p>
+    </div>
+    <article class="wrap policy-page" style="padding:8px 0 70px;max-width:900px;">
+      <p>This Privacy Policy applies to CarFinder’s website, accounts, vehicle listings, saved listings, seller dashboard and related communications. CarFinder is the data controller for information it decides how and why to process. We process information lawfully, fairly and transparently and limit it to what is needed for the purposes described here.</p>
+      <h2>1. Information we collect</h2>
+      <p>Depending on how you use the service, we may collect your name, email address, WhatsApp or telephone number, city, account identifiers, seller type, vehicle details, listing photographs, messages or enquiries you choose to send, favourites and saved searches. We also receive technical information needed to operate the site, such as browser, device, security events and approximate usage information. We do not ask you to submit passwords, national ID numbers, payment-card details, health information or other sensitive information in a listing.</p>
+      <h2>2. Why we use it</h2>
+      <p>We use information to create and secure accounts, publish and moderate listings, show seller contact details where a listing is publicly visible, respond to enquiries, provide favourites and saved searches, prevent fraud and abuse, maintain records, improve reliability, and comply with legal obligations. We use consent where we ask for it, perform the service you request, comply with law, and pursue legitimate operational and safety interests that do not override your rights.</p>
+      <h2>3. What is public</h2>
+      <p>An approved active listing may display vehicle details, photographs, city, price and selected seller information such as display name, seller type and a WhatsApp contact link. Pending, rejected and removed listings are not public through the marketplace. Do not place information in a listing that you expect to remain private.</p>
+      <h2>4. Sharing and service providers</h2>
+      <p>We do not sell personal information. We share information only when needed to provide the service, protect users, enforce our terms, respond to lawful requests or comply with law. CarFinder uses Supabase for authentication, database and private image storage, GitHub Pages for static website hosting, and user-selected communication services such as WhatsApp or email. These providers may process information outside Zimbabwe. We seek appropriate security and legal safeguards for processors and cross-border transfers.</p>
+      <h2>5. Retention</h2>
+      <p>We keep account, listing, moderation and security records only for as long as reasonably necessary for the purposes collected, legal compliance, safety, dispute resolution and legitimate operational records. Public listings may remain in backups or audit records after removal for a limited period. We periodically review and delete or anonymise information that is no longer needed.</p>
+      <h2>6. Your rights</h2>
+      <p>Subject to applicable law and reasonable verification, you may ask what personal information we hold about you, request correction of inaccurate or misleading information, object to or request deletion of information where applicable, withdraw consent where processing relies on consent, or complain about our handling of your information. Send requests to <a href="mailto:hello@carfinder.co.zw">hello@carfinder.co.zw</a>. We may need to keep certain records where the law permits or requires it.</p>
+      <h2>7. Security and incidents</h2>
+      <p>We use HTTPS, Supabase row-level security, private image storage, signed image URLs, access controls, moderation, upload limits and input validation. No internet service is risk-free, and we cannot promise that it can never be attacked. If we become aware of a personal-data breach, we will investigate, contain it and make notifications required by applicable law, including the applicable notification to the Zimbabwe Data Protection Authority.</p>
+      <h2>8. Cookies and local storage</h2>
+      <p>CarFinder uses browser local storage for optional features such as saved searches and comparison selections. We do not use those features to store passwords. Your browser may also store essential authentication data required by Supabase. You can clear local storage and browser data at any time, although saved features or sign-in may stop working.</p>
+      <h2>9. Children and policy changes</h2>
+      <p>The service is not directed to children. Do not create an account or submit another person’s information without authority. We may update this policy when our practices, providers or legal duties change. The effective date at the top of this page will change when a material update is published.</p>
+      <h2>10. Contact</h2>
+      <p>For privacy questions, access, correction, deletion or security concerns, contact <a href="mailto:hello@carfinder.co.zw">hello@carfinder.co.zw</a>. This policy is a practical website draft based on the Zimbabwe Cyber and Data Protection Act and should be reviewed by a Zimbabwe-qualified privacy lawyer or data-protection professional before final adoption.</p>
+    </article>
+  </div>
+
+  <!-- ================= SECURITY PAGE ================= -->
+  <div class="page" id="page-security" hidden>
+    <div class="wrap page-head">
+      <div class="kicker"><span class="dot" style="background:var(--khaki);"></span> Trust &amp; Safety</div>
+      <h1>Security &amp; Safety</h1>
+      <p>What we protect, what we expect from users, and how to report a vulnerability.</p>
+    </div>
+    <article class="wrap policy-page" style="padding:8px 0 70px;max-width:900px;">
+      <h2>Security controls</h2>
+      <p>CarFinder uses HTTPS, a publishable Supabase client key only in browser code, row-level security and database triggers for access decisions, private listing-photo storage, signed photo URLs, restricted upload types and sizes, admin moderation, bounded form fields, HTML escaping and safe external-link handling. Private service-role credentials are not stored in the website.</p>
+      <h2>Safe use</h2>
+      <p>Use a unique password, enable email confirmation when offered, do not share one-time codes, avoid sending identity or payment documents through listing descriptions, and verify a vehicle and seller independently. CarFinder will not ask for your password or a one-time authentication code by WhatsApp.</p>
+      <h2>Report a vulnerability</h2>
+      <p>If you find a suspected security issue, email <a href="mailto:hello@carfinder.co.zw?subject=CarFinder%20security%20report">hello@carfinder.co.zw</a> with the affected page, a short description, safe reproduction steps and the date and time. Do not access, download, alter or disclose other users’ information. We will acknowledge a credible report, investigate, contain the issue and communicate material updates where appropriate.</p>
+      <h2>Limits</h2>
+      <p>These measures reduce risk but cannot guarantee that a public internet service will never be attacked or that every third-party service will remain available. Security is a shared responsibility between CarFinder, its providers and users.</p>
+    </article>
+  </div>
+
   <!-- ================= SELL CTA (always visible) ================= -->
   <section class="sell-cta" id="sell">
     <div class="wrap sell-grid">
@@ -1228,6 +1319,9 @@
           <li><a href="#" data-view="rentals">Rent a car</a></li>
           <li><a href="#" data-view="match">AI Match</a></li>
           <li><a href="#" data-view="blog">Blog</a></li>
+          <li><a href="#" data-view="terms">Terms &amp; Conditions</a></li>
+          <li><a href="#" data-view="privacy">Privacy Policy</a></li>
+          <li><a href="#" data-view="security">Security &amp; Safety</a></li>
           <li><a href="#" data-scroll="sell">Sell your car</a></li>
         </ul>
       </div>
@@ -1413,6 +1507,31 @@ function escapeHtml(value){
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+function cleanText(value, maxLength = 500){
+  return String(value ?? '').normalize('NFKC').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim().slice(0, maxLength);
+}
+function safeNumber(value, min, max, label){
+  const number = Number(value);
+  if (!Number.isFinite(number) || number < min || number > max) throw new Error(`${label} must be between ${min.toLocaleString()} and ${max.toLocaleString()}.`);
+  return number;
+}
+function allowedValue(value, allowed, label){
+  const normalized = cleanText(value, 40);
+  if (!allowed.includes(normalized)) throw new Error(`${label} is not valid.`);
+  return normalized;
+}
+function safePhotoUrl(value){
+  if (value === PLACEHOLDER_IMG) return value;
+  try {
+    const url = new URL(String(value || ''), location.href);
+    if (url.protocol !== 'https:' || url.hostname !== 'eeodzwzxpquqwtvccqab.supabase.co') return PLACEHOLDER_IMG;
+    if (!url.pathname.startsWith('/storage/v1/object/sign/listing-photos/')) return PLACEHOLDER_IMG;
+    return url.href;
+  } catch (e) { return PLACEHOLDER_IMG; }
+}
+function cssImage(value){
+  return `url('${safePhotoUrl(value).replace(/[\'"\\\r\n]/g, '')}')`;
+}
 function csvCell(value){
   let text = value === null || value === undefined ? '' : String(value);
   // Guard spreadsheet users against formula injection from seller-controlled text.
@@ -1438,7 +1557,7 @@ function isRental(car){ return String(car && car.listing_type || 'sale').toLower
 function fmtListingPrice(car){ return isRental(car) ? `${fmtPrice(car.price)} ${car.rental_period || 'per day'}` : fmtPrice(car.price); }
 function fmtMileage(n){ return Number(n).toLocaleString('en-US') + ' km'; }
 function carById(id){ return listings.find(c => c.id === id) || myListings.find(c => c.id === id); }
-function carPhoto(car){ return (car.image_urls && car.image_urls[0]) ? car.image_urls[0] : PLACEHOLDER_IMG; }
+function carPhoto(car){ return safePhotoUrl((car.image_urls && car.image_urls[0]) || PLACEHOLDER_IMG); }
 const signedPhotoCache = new Map();
 function listingPhotoObjectPath(value){
   if (typeof value !== 'string' || !value.trim() || /^(data|blob):/i.test(value)) return null;
@@ -1501,7 +1620,8 @@ function showToast(msg){
 // has its own seller via profiles.whatsapp_number, not one shared business number.
 function sellerWaNumber(car){
   const raw = (car.profiles && car.profiles.whatsapp_number) || '';
-  return raw.replace(/[^\d]/g, ''); // wa.me needs digits only
+  const digits = raw.replace(/[^\d]/g, ''); // wa.me needs digits only
+  return digits.length >= 7 && digits.length <= 15 ? digits : '';
 }
 function waLink(car){
   const number = sellerWaNumber(car);
@@ -1559,7 +1679,7 @@ function legacyCopy(value){
    viewers, so every click below calls showPage() directly instead of relying
    on an <a href="#/..."> to trigger anything on its own. */
 function showPage(page, param){
-  const validPages = ['home','rentals','match','blog','post','sell','dashboard','favorites','admin'];
+  const validPages = ['home','rentals','match','blog','post','sell','dashboard','favorites','admin','terms','privacy','security'];
   let active = validPages.includes(page) ? page : 'home';
 
   // dashboard requires being signed in — bounce to the sell page's sign-in prompt otherwise
@@ -1683,6 +1803,7 @@ function openAuthModal(mode){
         <label for="authPassword">Password</label>
         <input id="authPassword" type="password" required minlength="6" style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;">
       </div>
+      ${isSignup ? `<label style="display:flex;gap:9px;align-items:flex-start;color:var(--sand-dim);font-size:12.5px;line-height:1.45;"><input id="authPolicyConsent" type="checkbox" required style="margin-top:3px;"><span>I agree to the <a href="#" data-view="terms">Terms &amp; Conditions</a> and <a href="#" data-view="privacy">Privacy Policy</a>.</span></label>` : ''}
       <div id="authError" style="color:var(--alert);font-size:13px;display:none;"></div>
       <button type="submit" class="match-btn" id="authSubmitBtn">${isSignup ? 'Create account' : 'Sign in'}</button>
     </form>
@@ -1702,14 +1823,19 @@ async function handleAuthSubmit(e){
   const errEl = document.getElementById('authError');
   errEl.style.display = 'none';
   btn.disabled = true;
-  const email = document.getElementById('authEmail').value.trim();
+  const email = cleanText(document.getElementById('authEmail').value, 254).toLowerCase();
   const password = document.getElementById('authPassword').value;
+  if (!/^\S+@\S+\.\S+$/.test(email)) { errEl.textContent = 'Enter a valid email address.'; errEl.style.display = 'block'; btn.disabled = false; return; }
+  if (password.length < 8 || password.length > 128) { errEl.textContent = 'Password must be between 8 and 128 characters.'; errEl.style.display = 'block'; btn.disabled = false; return; }
 
   try {
     if (authMode === 'signup'){
-      const display_name = document.getElementById('authName').value.trim();
-      const whatsapp_number = document.getElementById('authWhatsapp').value.trim();
-      const city = document.getElementById('authCity').value;
+      if (!document.getElementById('authPolicyConsent')?.checked) throw new Error('Please accept the Terms & Conditions and Privacy Policy.');
+      const display_name = cleanText(document.getElementById('authName').value, 100);
+      const whatsapp_number = document.getElementById('authWhatsapp').value.replace(/[^\d]/g, '');
+      const city = allowedValue(document.getElementById('authCity').value, ['Harare','Bulawayo','Mutare','Gweru','Masvingo'], 'City');
+      if (display_name.length < 2 || display_name.length > 100) throw new Error('Enter a valid name.');
+      if (whatsapp_number.length < 7 || whatsapp_number.length > 15) throw new Error('Enter a valid WhatsApp number.');
       const { data, error } = await sb.auth.signUp({
         email, password,
         options: { data: { display_name, whatsapp_number } }
@@ -1935,8 +2061,8 @@ function renderVehicleCards(targetGrid, results){
     const saved = myFavorites.has(c.id);
     const comparing = compareSelection.includes(c.id);
     return `
-    <div class="card ${comparing ? 'is-comparing' : ''}" data-id="${c.id}">
-      <div class="photo" style="background-image:url('${carPhoto(c)}')">
+    <div class="card ${comparing ? 'is-comparing' : ''}" data-id="${escapeHtml(c.id)}">
+      <div class="photo" style="background-image:${cssImage(carPhoto(c))}">
         <span class="badge ${c.clearance === 'Uncleared' ? 'badge-alert' : ''}">${escapeHtml(isRental(c) ? 'For rent · ' + (c.clearance || 'status n/a') : c.clearance)}</span>
         <div class="icon-row">
           <button class="icon-btn fav-btn" data-id="${c.id}" title="${saved ? 'Remove from saved cars' : 'Save to favorites'}" aria-label="${saved ? 'Remove from saved cars' : 'Save this listing'}" aria-pressed="${saved ? 'true' : 'false'}">${saved ? '♥' : '♡'}</button>
@@ -1945,7 +2071,7 @@ function renderVehicleCards(targetGrid, results){
         <span class="price-tag">${fmtListingPrice(c)}</span>
       </div>
       <div class="body">
-        <h3>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
+        <h3>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
         <div class="loc">${escapeHtml(c.city)}${c.profiles && c.profiles.verified ? ' · <span style="color:var(--khaki);font-weight:600;">Verified seller</span>' : ''}</div>
         <div class="spec-row">
           <span>${fmtMileage(c.mileage)}</span>
@@ -2065,7 +2191,7 @@ function renderRecentStrip(){
   strip.style.display = 'block';
   row.innerHTML = recentlyViewed.map(c => `
     <div class="recent-item">
-      <div class="thumb" style="background-image:url('${carPhoto(c)}')"></div>
+      <div class="thumb" style="background-image:${cssImage(carPhoto(c))}"></div>
       <div class="info"><b>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b><span>${fmtListingPrice(c)}</span></div>
     </div>`).join('');
 }
@@ -2079,8 +2205,8 @@ function openDetail(id){
   const seller = c.profiles;
   document.getElementById('detailModal').innerHTML = `
     <button class="modal-close" id="detailCloseBtn" aria-label="Close">&times;</button>
-    <div class="photo" style="background-image:url('${carPhoto(c)}')"></div>
-    <h2>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h2>
+    <div class="photo" style="background-image:${cssImage(carPhoto(c))}"></div>
+    <h2>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h2>
     <div class="price-line">${fmtListingPrice(c)}</div>
     ${c.description ? `<p style="color:var(--sand-dim);font-size:14px;margin-top:10px;">${escapeHtml(c.description)}</p>` : ''}
     <div class="modal-specs">
@@ -2343,21 +2469,24 @@ on('sellForm', 'submit', async e => {
   btn.textContent = 'Submitting for review…';
 
   try {
+    if (!document.getElementById('sellerPolicyConsent')?.checked) throw new Error('Please accept the Terms & Conditions and Privacy Policy.');
+    const listingType = allowedValue(document.getElementById('sListingType').value, ['sale','rent'], 'Listing type');
     const payload = {
-      listing_type: document.getElementById('sListingType').value,
-      rental_period: document.getElementById('sListingType').value === 'rent' ? document.getElementById('sRentalPeriod').value : null,
-      make: document.getElementById('sMake').value.trim(),
-      model: document.getElementById('sModel').value.trim(),
-      year: Number(document.getElementById('sYear').value),
-      price: Number(document.getElementById('sPrice').value),
-      city: document.getElementById('sCity').value,
-      mileage: Number(document.getElementById('sMileage').value),
-      transmission: document.getElementById('sTrans').value,
-      fuel: document.getElementById('sFuel').value,
-      clearance: document.getElementById('sClearance').value,
-      category: document.getElementById('sCategory').value,
-      description: document.getElementById('sDescription').value.trim() || null,
+      listing_type: listingType,
+      rental_period: listingType === 'rent' ? allowedValue(document.getElementById('sRentalPeriod').value, ['per day','per week','per month'], 'Rental period') : null,
+      make: cleanText(document.getElementById('sMake').value, 60),
+      model: cleanText(document.getElementById('sModel').value, 60),
+      year: safeNumber(document.getElementById('sYear').value, 1950, 2035, 'Year'),
+      price: safeNumber(document.getElementById('sPrice').value, 0, 1000000000, 'Price'),
+      city: allowedValue(document.getElementById('sCity').value, ['Harare','Bulawayo','Mutare','Gweru','Masvingo'], 'City'),
+      mileage: safeNumber(document.getElementById('sMileage').value, 0, 2000000, 'Mileage'),
+      transmission: allowedValue(document.getElementById('sTrans').value, ['Manual','Automatic'], 'Transmission'),
+      fuel: allowedValue(document.getElementById('sFuel').value, ['Petrol','Diesel','Hybrid','Electric'], 'Fuel type'),
+      clearance: allowedValue(document.getElementById('sClearance').value, ['Cleared','Uncleared'], 'Import status'),
+      category: allowedValue(document.getElementById('sCategory').value, ['sedan','hatchback','suv','pickup','van','other'], 'Body type'),
+      description: cleanText(document.getElementById('sDescription').value, 2000) || null,
     };
+    if (!payload.make || !payload.model) throw new Error('Make and model are required.');
 
     const fileInput = document.getElementById('sPhotos');
     const files = Array.from(fileInput.files || []);
@@ -2368,7 +2497,9 @@ on('sellForm', 'submit', async e => {
     if (files.length){
       const urls = [];
       for (const file of files){
-        const path = `${currentUser.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g,'_')}`;
+        const extension = (file.name.split('.').pop() || '').toLowerCase();
+        if (!['jpg','jpeg','png','webp'].includes(extension)) throw new Error('Photos must use a JPG, PNG, or WebP file extension.');
+        const path = `${currentUser.id}/${crypto.randomUUID()}-${extension}`;
         const { error: upErr } = await sb.storage.from('listing-photos').upload(path, file);
         if (upErr) throw upErr;
         urls.push(path);
@@ -2415,12 +2546,12 @@ function renderDashboard(){
 
   grid.innerHTML = myListings.map(c => `
     <div class="card">
-      <div class="photo" style="background-image:url('${carPhoto(c)}')">
-        <span class="badge">${c.status}</span>
+      <div class="photo" style="background-image:${cssImage(carPhoto(c))}">
+        <span class="badge">${escapeHtml(c.status || 'unknown')}</span>
         <span class="price-tag">${fmtPrice(c.price)}</span>
       </div>
       <div class="body">
-        <h3>${c.year} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
+        <h3>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
         <div class="loc">${escapeHtml(c.city)} · ${daysAgo(c.created_at)}</div>
         <div style="margin:2px 0 10px;"><span class="admin-status ${c.status === 'pending' ? 'pending' : ''}">${c.status === 'pending' ? 'Pending admin review' : escapeHtml(c.status || 'unknown')}</span></div>
         <div class="card-actions">
