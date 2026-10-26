@@ -9,6 +9,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://eeodzwzxpquqwtvccqab.supabase.co; connect-src 'self' https://eeodzwzxpquqwtvccqab.supabase.co; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'; upgrade-insecure-requests">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+<link rel="preconnect" href="https://eeodzwzxpquqwtvccqab.supabase.co">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -567,6 +568,17 @@
   .listing-mode-btn.active{background:#fff;color:#0b4ea2;border-color:#fff;box-shadow:0 5px 16px rgba(0,0,0,.14);}
   .nav-sell-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px;background:#0b4ea2;color:#fff;border-color:#0b4ea2;box-shadow:0 5px 16px rgba(11,78,162,.22);font-weight:800;letter-spacing:.01em;}
   .nav-sell-cta:hover{background:#083b7a;border-color:#083b7a;color:#fff;transform:translateY(-1px);}
+  .owner-dashboard-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0;}
+  .owner-stat{padding:16px;border:1px solid #dbe3ec;border-radius:10px;background:#f7f9fc;}
+  .owner-stat strong{display:block;color:#0b4ea2;font:700 28px/1 'Space Grotesk',sans-serif;}
+  .owner-stat span{display:block;margin-top:7px;color:#5b6b80;font-size:12px;}
+  .owner-dashboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 20px;}
+  .owner-dashboard-tabs{display:flex;gap:7px;flex-wrap:wrap;}
+  .owner-dashboard-tab{border:1px solid #d7dee8;border-radius:999px;background:#fff;color:#43536a;padding:9px 14px;font:600 13px/1 'IBM Plex Sans',sans-serif;cursor:pointer;}
+  .owner-dashboard-tab.active{background:#0b4ea2;border-color:#0b4ea2;color:#fff;}
+  .owner-role-note{margin:0;color:#5b6b80;font-size:13px;}
+  .owner-listing-type{display:inline-flex;margin-bottom:9px;padding:5px 8px;border-radius:999px;background:#eef4fc;color:#0b4ea2;font-size:11px;font-weight:700;}
+  @media(max-width:600px){.owner-dashboard-summary{grid-template-columns:1fr 1fr}.owner-stat:last-child{grid-column:1/-1}}
   .search-card-pro .field label,.advanced-filters .field label{font-size:12px;color:#43536a;font-weight:600;}
   .search-card-pro input,.search-card-pro select,.advanced-filters input,.advanced-filters select{min-height:46px;border:1px solid #d7dee8;border-radius:8px;background:#fff;padding:11px 12px;color:#0f1b2d;}
   .search-query-field input{font-size:15px;}
@@ -1072,16 +1084,28 @@
   <!-- ================= MY LISTINGS DASHBOARD ================= -->
   <div class="page" id="page-dashboard" hidden>
     <div class="wrap page-head">
-      <div class="kicker"><span class="dot"></span> My Listings</div>
-      <h1>Your listings</h1>
-      <p>Manage what you have for sale on CarFinder.</p>
+      <div class="kicker"><span class="dot"></span> Owner dashboard</div>
+      <h1>Manage your listings</h1>
+      <p class="owner-role-note" id="ownerRoleNote">Your authenticated owner workspace for sale and rental vehicles.</p>
     </div>
     <div class="wrap" style="padding:8px 0 70px;">
-      <div style="margin-bottom:20px;"><a href="#" data-view="sell" class="navbtn" style="display:inline-block;">+ Add a new listing</a></div>
+      <div class="owner-dashboard-summary" aria-label="Listing summary">
+        <div class="owner-stat"><strong id="ownerTotalCount">0</strong><span>All listings</span></div>
+        <div class="owner-stat"><strong id="ownerSaleCount">0</strong><span>For sale</span></div>
+        <div class="owner-stat"><strong id="ownerRentalCount">0</strong><span>For rent</span></div>
+      </div>
+      <div class="owner-dashboard-toolbar">
+        <div class="owner-dashboard-tabs" role="tablist" aria-label="Manage listing type">
+          <button type="button" class="owner-dashboard-tab active" data-dashboard-filter="all" aria-selected="true">All listings</button>
+          <button type="button" class="owner-dashboard-tab" data-dashboard-filter="sale" aria-selected="false">Sale listings</button>
+          <button type="button" class="owner-dashboard-tab" data-dashboard-filter="rent" aria-selected="false">Rental listings</button>
+        </div>
+        <a href="#" data-view="sell" class="navbtn">+ Add a new listing</a>
+      </div>
       <div id="dashboardGrid" class="grid"></div>
       <div id="dashboardEmpty" class="empty-state" style="display:none;">
-        <h3>No listings yet</h3>
-        <p>Add your first car to get started.</p>
+        <h3 id="dashboardEmptyTitle">No listings in this view</h3>
+        <p id="dashboardEmptyText">Add your first car to get started.</p>
       </div>
     </div>
   </div>
@@ -1439,6 +1463,7 @@ let currentUser = null;      // Supabase auth user, or null if signed out
 let currentProfile = null;   // row from public.profiles for currentUser
 let myFavorites = new Set(); // listing ids the signed-in user has favorited
 let myListings = [];         // the signed-in seller's own listings (any status)
+let dashboardFilter = 'all';    // owner dashboard view: all | sale | rent
 let editingListingId = null; // set when the Sell form is editing an existing listing
 let authMode = 'signin';     // 'signin' | 'signup', drives the auth modal
 let isAdmin = false;         // true only if currentUser has a row in public.admins
@@ -1448,6 +1473,9 @@ let adminReviewAnalytics = null; // audit-backed counts from the admin-only RPC
 let adminListingsLoadFailed = false;
 
 /* ============ HELPERS ============ */
+function withTimeout(promise, ms = 9000){
+  return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), ms))]);
+}
 function on(target, event, handler){
   try {
     const el = typeof target === 'string' ? document.getElementById(target) : target;
@@ -1547,8 +1575,9 @@ async function signListingPhotos(cars){
   const uniquePaths = [...new Set(rows.flatMap(row => row.paths.filter(Boolean)))];
   const now = Date.now();
   const needed = uniquePaths.filter(path => !signedPhotoCache.has(path) || signedPhotoCache.get(path).expiresAt <= now + 60000);
-  for (let offset = 0; offset < needed.length; offset += 100){
-    const batch = needed.slice(offset, offset + 100);
+  const batches = [];
+  for (let offset = 0; offset < needed.length; offset += 100) batches.push(needed.slice(offset, offset + 100));
+  await Promise.all(batches.map(async batch => {
     const { data, error } = await sb.storage.from('listing-photos').createSignedUrls(batch, 3600);
     const results = Array.isArray(data) ? data : (data && Array.isArray(data.signedUrls) ? data.signedUrls : []);
     if (error) console.warn('CarFinder: could not sign listing photos', error);
@@ -1556,7 +1585,7 @@ async function signListingPhotos(cars){
       const result = results.find(item => item.path === path) || results[i];
       signedPhotoCache.set(path, { url: !error && result && result.signedUrl ? result.signedUrl : PLACEHOLDER_IMG, expiresAt: Date.now() + (error ? 30000 : 3540000) });
     });
-  }
+  }));
   return rows.map(({car,sources,paths}) => ({
     ...car,
     __photoPaths: paths,
@@ -1848,14 +1877,23 @@ async function checkIsAdmin(userId){
 
 sb.auth.onAuthStateChange(async (event, session) => {
   currentUser = session ? session.user : null;
-  currentProfile = currentUser ? await loadProfile(currentUser.id) : null;
   myFavorites = new Set();
-  isAdmin = currentUser ? await checkIsAdmin(currentUser.id) : false;
-  if (currentUser) await loadMyFavorites();
+  if (currentUser){
+    const [profileResult, adminResult] = await Promise.allSettled([
+      withTimeout(loadProfile(currentUser.id)),
+      withTimeout(checkIsAdmin(currentUser.id))
+    ]);
+    currentProfile = profileResult.status === 'fulfilled' ? profileResult.value : null;
+    isAdmin = adminResult.status === 'fulfilled' ? adminResult.value : false;
+    loadMyFavorites().catch(error => console.warn('CarFinder: favorites unavailable', error));
+  } else {
+    currentProfile = null;
+    isAdmin = false;
+  }
   refreshAuthUI();
   renderListings();
-  if (!document.getElementById('page-dashboard').hidden) renderDashboard();
-  if (!document.getElementById('page-admin').hidden) { await loadAdminData(); renderAdminDashboard(); }
+  if (!document.getElementById('page-dashboard').hidden) { loadMyListings().then(renderDashboard); }
+  if (!document.getElementById('page-admin').hidden) { loadAdminData().then(renderAdminDashboard); }
 });
 
 /* ============ FAVORITES ============ */
@@ -1889,23 +1927,27 @@ async function toggleFavorite(listingId){
 
 /* ============ DATA LOADING ============ */
 async function loadListings(){
-  const { data, error } = await sb
-    .from('listings')
-    .select('*, profiles!listings_seller_id_fkey(display_name, whatsapp_number, verified, seller_type)')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
-  if (error){
+  const listingColumns = 'id,seller_id,make,model,year,price,city,mileage,transmission,fuel,clearance,description,image_urls,status,featured,created_at,updated_at,category,listing_type,rental_period,profiles!listings_seller_id_fkey(display_name,whatsapp_number,verified,seller_type)';
+  try {
+    const { data, error } = await withTimeout(sb.from('listings').select(listingColumns).eq('status', 'active').order('created_at', { ascending: false }));
+    if (error) throw error;
+    listings = data || [];
+    listingsLoaded = true;
+    compareSelection = compareSelection.filter(id => listings.some(car => String(car.id) === String(id))).slice(0, 3);
+    saveCompareSelection();
+    renderListings();
+    renderRentalsPage();
+    renderCompareBar();
+    // Private image signing runs after cards are visible, so the first paint is not blocked by storage.
+    signListingPhotos(listings).then(signed => { listings = signed; renderListings(); renderRentalsPage(); }).catch(error => console.warn('CarFinder: photo signing deferred', error));
+  } catch (error){
     console.error('CarFinder: loadListings failed', error);
-    showToast('Could not load listings — check your connection');
     listings = [];
-  } else {
-    listings = await signListingPhotos(data || []);
+    listingsLoaded = true;
+    renderListings();
+    renderRentalsPage();
+    showToast('Listings are taking longer than usual — check your connection');
   }
-  listingsLoaded = true;
-  compareSelection = compareSelection.filter(id => listings.some(car => String(car.id) === String(id))).slice(0, 3);
-  saveCompareSelection();
-  renderListings();
-  renderRentalsPage();
   renderCompareBar();
 }
 
@@ -2498,57 +2540,78 @@ on('sellForm', 'submit', async e => {
   }
 });
 
-/* ============ DASHBOARD ============ */
+/* ============ OWNER DASHBOARD ============ */
 function renderDashboard(){
   const grid = document.getElementById('dashboardGrid');
   const empty = document.getElementById('dashboardEmpty');
   if (!grid) return;
-  if (myListings.length === 0){
+  const sales = myListings.filter(car => !isRental(car));
+  const rentals = myListings.filter(car => isRental(car));
+  const stats = { total: myListings.length, sale: sales.length, rent: rentals.length };
+  ['ownerTotalCount','ownerSaleCount','ownerRentalCount'].forEach((id, index) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = [stats.total, stats.sale, stats.rent][index];
+  });
+  const roleNote = document.getElementById('ownerRoleNote');
+  if (roleNote) roleNote.textContent = currentProfile?.seller_type === 'dealer'
+    ? 'Dealer owner workspace — manage your sale and rental inventory from one secure account.'
+    : 'Private owner workspace — manage your sale and rental vehicles from one secure account.';
+  document.querySelectorAll('[data-dashboard-filter]').forEach(tab => {
+    const active = tab.dataset.dashboardFilter === dashboardFilter;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  const visible = dashboardFilter === 'all' ? myListings : myListings.filter(car => dashboardFilter === 'rent' ? isRental(car) : !isRental(car));
+  if (visible.length === 0){
+    grid.innerHTML = '';
     grid.style.display = 'none';
     empty.style.display = 'block';
+    const title = document.getElementById('dashboardEmptyTitle');
+    const text = document.getElementById('dashboardEmptyText');
+    if (title) title.textContent = dashboardFilter === 'rent' ? 'No rental listings yet' : dashboardFilter === 'sale' ? 'No sale listings yet' : 'No listings yet';
+    if (text) text.textContent = dashboardFilter === 'rent' ? 'Add your first rental vehicle to get started.' : dashboardFilter === 'sale' ? 'Add your first vehicle for sale to get started.' : 'Add your first car to get started.';
     return;
   }
   grid.style.display = 'grid';
   empty.style.display = 'none';
-
-  grid.innerHTML = myListings.map(c => `
+  grid.innerHTML = visible.map(c => `
     <div class="card">
       <div class="photo" style="background-image:${cssImage(carPhoto(c))}">
         <span class="badge">${escapeHtml(c.status || 'unknown')}</span>
-        <span class="price-tag">${fmtPrice(c.price)}</span>
+        <span class="price-tag">${fmtListingPrice(c)}</span>
       </div>
       <div class="body">
+        <span class="owner-listing-type">${isRental(c) ? 'Rental listing' : 'Sale listing'}</span>
         <h3>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</h3>
         <div class="loc">${escapeHtml(c.city)} · ${daysAgo(c.created_at)}</div>
         <div style="margin:2px 0 10px;"><span class="admin-status ${c.status === 'pending' ? 'pending' : ''}">${c.status === 'pending' ? 'Pending admin review' : escapeHtml(c.status || 'unknown')}</span></div>
         <div class="card-actions">
-          <button class="btn-outline dash-edit-btn" data-id="${c.id}">Edit</button>
-          <button class="btn-outline dash-sold-btn" data-id="${c.id}">${c.status === 'sold' ? 'Reactivate' : 'Mark sold'}</button>
+          <button class="btn-outline dash-edit-btn" data-id="${escapeHtml(c.id)}">Edit</button>
+          <button class="btn-outline dash-sold-btn" data-id="${escapeHtml(c.id)}">${c.status === 'sold' ? 'Reactivate' : isRental(c) ? 'Pause rental' : 'Mark sold'}</button>
         </div>
         <div class="card-actions">
-          <button class="btn-outline dash-delete-btn" data-id="${c.id}" style="flex:1;color:var(--alert);border-color:var(--alert);">Delete</button>
+          <button class="btn-outline dash-delete-btn" data-id="${escapeHtml(c.id)}" style="flex:1;color:var(--alert);border-color:var(--alert);">Delete</button>
         </div>
       </div>
     </div>`).join('');
-
   grid.querySelectorAll('.dash-edit-btn').forEach(btn => btn.addEventListener('click', () => {
-    const car = myListings.find(c => c.id === btn.dataset.id);
+    const car = myListings.find(c => String(c.id) === String(btn.dataset.id));
     if (car){ showPage('sell'); fillSellForm(car); }
   }));
   grid.querySelectorAll('.dash-sold-btn').forEach(btn => btn.addEventListener('click', async () => {
-    const car = myListings.find(c => c.id === btn.dataset.id);
+    const car = myListings.find(c => String(c.id) === String(btn.dataset.id));
     if (!car) return;
     const newStatus = car.status === 'sold' ? 'pending' : 'sold';
     const { error } = await sb.from('listings').update({ status: newStatus }).eq('id', car.id).eq('seller_id', currentUser.id);
     if (error) { showToast('Could not update listing'); return; }
-    showToast(newStatus === 'sold' ? 'Marked as sold' : 'Resubmitted for admin review.');
+    showToast(newStatus === 'sold' ? (isRental(car) ? 'Rental paused' : 'Marked as sold') : 'Resubmitted for admin review.');
     await loadMyListings();
     await loadListings();
     renderDashboard();
   }));
   grid.querySelectorAll('.dash-delete-btn').forEach(btn => btn.addEventListener('click', async () => {
     if (!confirm('Delete this listing? This cannot be undone.')) return;
-    const { error } = await sb.from('listings').delete().eq('id', btn.dataset.id);
+    const { error } = await sb.from('listings').delete().eq('id', btn.dataset.id).eq('seller_id', currentUser.id);
     if (error) { showToast('Could not delete listing'); return; }
     showToast('Listing deleted');
     await loadMyListings();
@@ -2556,7 +2619,10 @@ function renderDashboard(){
     renderDashboard();
   }));
 }
-
+document.querySelectorAll('[data-dashboard-filter]').forEach(tab => tab.addEventListener('click', () => {
+  dashboardFilter = tab.dataset.dashboardFilter || 'all';
+  renderDashboard();
+}));
 /* ============ ADMIN ============ */
 // These queries only return data because the "Admins can read all listings" /
 // "Admins can update any profile" RLS policies allow it for this specific
