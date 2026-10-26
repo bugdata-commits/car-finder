@@ -561,6 +561,12 @@
   .hero-plate .plate-top{border-color:rgba(255,255,255,.35);}
   .search-panel{margin-top:-46px;}
   .search-card-pro{grid-template-columns:minmax(220px,1.45fr) minmax(145px,.8fr) minmax(190px,1fr) auto;align-items:end;background:#fff;border:1px solid #dbe3ec;border-radius:12px;padding:20px;box-shadow:0 16px 45px rgba(15,27,45,.10);gap:12px;}
+  .listing-mode-toggle{display:flex;gap:8px;align-items:center;margin:0 0 12px;padding:0 2px;}
+  .listing-mode-btn{appearance:none;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:10px 18px;font:700 14px/1 'Space Grotesk',sans-serif;cursor:pointer;transition:background .15s,border-color .15s,transform .15s;}
+  .listing-mode-btn:hover{transform:translateY(-1px);border-color:#fff;background:rgba(255,255,255,.2);}
+  .listing-mode-btn.active{background:#fff;color:#0b4ea2;border-color:#fff;box-shadow:0 5px 16px rgba(0,0,0,.14);}
+  .nav-sell-cta{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px;background:#0b4ea2;color:#fff;border-color:#0b4ea2;box-shadow:0 5px 16px rgba(11,78,162,.22);font-weight:800;letter-spacing:.01em;}
+  .nav-sell-cta:hover{background:#083b7a;border-color:#083b7a;color:#fff;transform:translateY(-1px);}
   .search-card-pro .field label,.advanced-filters .field label{font-size:12px;color:#43536a;font-weight:600;}
   .search-card-pro input,.search-card-pro select,.advanced-filters input,.advanced-filters select{min-height:46px;border:1px solid #d7dee8;border-radius:8px;background:#fff;padding:11px 12px;color:#0f1b2d;}
   .search-query-field input{font-size:15px;}
@@ -582,28 +588,6 @@
   .quick-searches{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 2px 0;color:#64748b;font-size:12px;}
   .quick-searches button{border:1px solid #dce4ee;border-radius:999px;padding:6px 12px;background:#fff;color:#334155;font-size:12px;}
   .quick-searches button:hover{border-color:#0b4ea2;color:#0b4ea2;background:#f3f7ff;}
-  .budget-section{padding:64px 0;margin:36px 0 8px;background:#f4f7fb;border-top:1px solid #e5ebf2;border-bottom:1px solid #e5ebf2;}
-  .budget-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center;}
-  .budget-copy .eyebrow-line{margin-bottom:12px;}
-  .budget-copy h2{font-size:clamp(28px,3vw,38px);line-height:1.12;max-width:470px;letter-spacing:-.035em;}
-  .budget-copy p{color:#5b6b80;max-width:430px;margin:16px 0 18px;}
-  .budget-link{color:#0b4ea2;font-size:14px;font-weight:700;}
-  .budget-calculator{background:#fff;border:1px solid #e0e7ef;border-radius:14px;padding:24px;box-shadow:0 12px 36px rgba(15,27,45,.06);}
-  .budget-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
-  .budget-card-head h3{font-size:19px;margin-top:4px;}
-  .budget-kicker{font-size:11px;font-weight:700;color:#0b4ea2;text-transform:uppercase;letter-spacing:.08em;}
-  .budget-currency{background:#eef4fc;color:#0b4ea2;border-radius:999px;font-size:11px;font-weight:700;padding:6px 10px;}
-  .budget-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .budget-fields .field label{display:block;font-size:12px;color:#506176;margin-bottom:6px;}
-  .budget-fields input,.budget-fields select{width:100%;min-height:42px;border:1px solid #dbe2ea;border-radius:7px;padding:9px 11px;color:#0f1b2d;background:#fff;font:inherit;}
-  .money-input{display:flex;align-items:center;border:1px solid #dbe2ea;border-radius:7px;padding:0 10px;color:#718096;}
-  .money-input input{border:0;outline:0;padding-left:5px;box-shadow:none;}
-  .money-input input:focus{outline:0;}
-  .payment-result{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;padding:16px 18px;background:#f2f7ff;border-radius:9px;}
-  .payment-result span{display:block;color:#52647b;font-size:12px;}
-  .payment-result strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:27px;color:#0b4ea2;}
-  .payment-note{text-align:right;max-width:155px;}
-  .calculator-disclaimer{margin:12px 0 0;color:#738095;font-size:11px;line-height:1.5;}
   .listings-section{padding-top:48px;}
   .listings-head h2{letter-spacing:-.025em;}
   .card{border-radius:10px;border-color:#e0e6ee;transition:transform .18s,box-shadow .18s,border-color .18s;}
@@ -615,9 +599,7 @@
     .search-card-pro{grid-template-columns:1fr 1fr;}
     .search-card-pro .search-query-field{grid-column:1/-1;}
     .search-card-pro .search-btn{grid-column:1/-1;}
-    .budget-layout{grid-template-columns:1fr;gap:28px;}
-    .budget-copy h2{max-width:640px;}
-  }
+      }
   @media(max-width:560px){
     .hero{padding:48px 0 68px;}
     .hero h1{font-size:39px;}
@@ -627,11 +609,7 @@
     .search-actions{width:100%;justify-content:space-between;margin:0;}
     .advanced-filters[open]{width:100%;}
     .advanced-grid{grid-template-columns:1fr 1fr;}
-    .budget-section{padding:44px 0;margin-top:26px;}
-    .budget-calculator{padding:18px;}
-    .payment-result{align-items:flex-start;flex-direction:column;}
-    .payment-note{text-align:left;max-width:none;}
-  }
+          }
 
   /* ---------- responsive ---------- */
   @media (max-width:860px){
@@ -683,7 +661,6 @@
   .hero-trust{display:flex;gap:26px;flex-wrap:wrap;padding-top:24px;color:rgba(255,255,255,.64);font-size:11.5px;}
   .hero-trust span{display:flex;align-items:center;gap:8px;}
   .hero-trust span:before{content:'✓';color:#49d598;font-weight:700;}
-  .budget-section{margin-top:0;padding:52px 0;background:#f5f8fc;}
   .listings-section{padding-top:52px;}
   .listings-head{align-items:center;padding-bottom:15px;border-bottom:1px solid #e7ebf1;margin-bottom:22px;}
   .listings-head h2{font-size:27px;}
@@ -728,6 +705,8 @@
     .hero{padding-bottom:26px;}
     .hero-image-search{right:2.6%;bottom:10%;width:28%;height:11%;}
     .hero .search-panel{margin-top:18px;}
+    .listing-mode-toggle{gap:6px;margin-bottom:10px;}
+    .listing-mode-btn{flex:1;padding:10px 8px;font-size:12.5px;}
   }
 
 
@@ -753,7 +732,7 @@
     .nav > .menu-toggle{grid-column:1;width:36px;height:36px;}
     .nav > .nav-actions{grid-column:3;}
     .nav-actions #navSignIn,.nav-actions #navSignOutBtn{display:none !important;}
-    .nav .navbtn{padding:8px 10px;font-size:12px;}
+    .nav .navbtn{padding:9px 8px;font-size:11.5px;min-height:38px;}
   }
 
 </style>
@@ -777,7 +756,7 @@
     <div class="nav-actions" style="display:flex;align-items:center;gap:14px;">
       <a href="#" id="navSignIn" data-auth="signed-out" style="color:var(--sand-dim);font-size:15px;">Sign in</a>
       <button id="navSignOutBtn" data-auth="signed-in" style="display:none;background:none;border:1px solid var(--line);color:var(--sand);padding:8px 14px;border-radius:var(--radius);font-size:14px;">Sign out</button>
-      <a href="#" data-page="sell" data-view="sell" class="navbtn" id="navSellBtn">List your car</a>
+      <a href="#" data-page="sell" data-view="sell" class="navbtn nav-sell-cta" id="navSellBtn" aria-label="List your car">List your car</a>
     </div>
     <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -809,6 +788,10 @@
         <a class="hero-image-search" href="#heroSearchPanel" aria-label="Search cars now"></a>
       </div>
       <div class="wrap search-panel" id="heroSearchPanel">
+        <div class="listing-mode-toggle" role="group" aria-label="Choose what you want to browse">
+          <button type="button" class="listing-mode-btn active" data-listing-mode="sale" aria-pressed="true">Cars for sale</button>
+          <button type="button" class="listing-mode-btn" data-listing-mode="rent" aria-pressed="false">Cars for rental</button>
+        </div>
         <div class="search-card search-card-pro">
           <div class="field search-query-field">
             <label for="q">Make, model or keyword</label>
@@ -868,28 +851,6 @@
         </div>
       </div>
       <div class="hero-trust wrap"><span>Zimbabwe-focused listings</span><span>Side-by-side comparisons</span><span>Direct seller contact</span></div>
-    </section>
-
-    <section class="budget-section" id="budgetPlanner">
-      <div class="wrap budget-layout">
-        <div class="budget-copy">
-          <div class="eyebrow-line"><span class="dot"></span> Plan your budget</div>
-          <h2>Know the monthly number before you message a seller.</h2>
-          <p>Estimate a payment from the price, deposit, rate and term you enter. It’s a planning tool, not a lender quote.</p>
-          <a href="#listings" class="budget-link">Browse cars <span aria-hidden="true">→</span></a>
-        </div>
-        <div class="budget-calculator" id="budgetCalculator">
-          <div class="budget-card-head"><div><span class="budget-kicker">CarFinder calculator</span><h3>Monthly payment estimate</h3></div><span class="budget-currency">USD</span></div>
-          <div class="budget-fields">
-            <div class="field"><label for="loanPrice">Vehicle price</label><div class="money-input"><span>$</span><input id="loanPrice" type="number" min="0" step="100" value="10000"></div></div>
-            <div class="field"><label for="loanDeposit">Deposit</label><div class="money-input"><span>$</span><input id="loanDeposit" type="number" min="0" step="100" value="1000"></div></div>
-            <div class="field"><label for="loanRate">Annual interest rate</label><div class="money-input"><input id="loanRate" type="number" min="0" max="100" step="0.1" value="0"><span>%</span></div></div>
-            <div class="field"><label for="loanTerm">Term</label><select id="loanTerm"><option value="12">12 months</option><option value="24">24 months</option><option value="36" selected>36 months</option><option value="48">48 months</option><option value="60">60 months</option></select></div>
-          </div>
-          <div class="payment-result"><div><span>Estimated monthly payment</span><strong id="monthlyEstimate">$250</strong></div><span class="payment-note" id="paymentNote">Principal-only estimate at 0% interest</span></div>
-          <p class="calculator-disclaimer">Actual rates, fees and approval depend on your lender. Confirm all terms directly with the provider.</p>
-        </div>
-      </div>
     </section>
 
     <section class="listings-section" id="listings">
@@ -2128,7 +2089,28 @@ function renderFavoritesPage(){
 
 on('searchBtn', 'click', () => { renderListings(); document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'}); });
 ['sort','loc','price','priceMin','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter','listingTypeFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
+document.querySelectorAll('[data-listing-mode]').forEach(btn => btn.addEventListener('click', () => {
+  const mode = btn.dataset.listingMode;
+  const filter = document.getElementById('listingTypeFilter');
+  if (filter) filter.value = mode;
+  document.querySelectorAll('[data-listing-mode]').forEach(control => {
+    const active = control.dataset.listingMode === mode;
+    control.classList.toggle('active', active);
+    control.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+  renderListings();
+  document.getElementById('listings')?.scrollIntoView({behavior:'smooth', block:'start'});
+}));
 ['q','price','priceMin','yearMin','yearMax','mileageMin','mileageMax'].forEach(id => on(id, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderListings(); } }));
+function syncListingModeButtons(){
+  const mode = document.getElementById('listingTypeFilter')?.value || '';
+  document.querySelectorAll('[data-listing-mode]').forEach(control => {
+    const active = mode === control.dataset.listingMode;
+    control.classList.toggle('active', active);
+    control.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+}
+on('listingTypeFilter', 'change', syncListingModeButtons);
 document.querySelectorAll('[data-quick-search]').forEach(btn => btn.addEventListener('click', () => {
   document.getElementById('q').value = btn.dataset.quickSearch;
   renderListings();
@@ -2160,21 +2142,6 @@ on('resetSearchBtn','click', () => {
 });
 
 
-/* ============ PAYMENT PLANNER ============ */
-function updatePaymentEstimate(){
-  const price = Math.max(0, Number(document.getElementById('loanPrice').value) || 0);
-  const deposit = Math.min(price, Math.max(0, Number(document.getElementById('loanDeposit').value) || 0));
-  const annualRate = Math.max(0, Number(document.getElementById('loanRate').value) || 0);
-  const months = Math.max(1, Number(document.getElementById('loanTerm').value) || 36);
-  const principal = price - deposit;
-  const monthlyRate = annualRate / 1200;
-  const payment = monthlyRate ? principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)) : principal / months;
-  document.getElementById('monthlyEstimate').textContent = '$' + Math.round(payment).toLocaleString('en-US');
-  document.getElementById('paymentNote').textContent = annualRate ? `${annualRate}% entered rate · ${months} months` : `Principal-only estimate at 0% interest · ${months} months`;
-}
-['loanPrice','loanDeposit','loanRate','loanTerm'].forEach(id => on(id,'input',updatePaymentEstimate));
-['loanTerm'].forEach(id => on(id,'change',updatePaymentEstimate));
-updatePaymentEstimate();
 updateSavedSearchButton();
 
 /* ============ RECENTLY VIEWED ============ */
