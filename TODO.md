@@ -5,3 +5,4 @@
 - [x] Public listings render before private photo signing completes.
 - [x] Independent auth startup requests run in parallel with bounded failure handling.
 - [x] Supabase connection warm-up and explicit listing columns reduce avoidable loading work.
+- [x] Remove Blog and AI Match from navigation, homepage, route manifest, page markup, scripts, and feature-only styling while preserving core marketplace and owner features.
