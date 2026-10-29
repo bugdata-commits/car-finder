@@ -15,3 +15,8 @@ CarFinder supports three recovery paths in the authentication modal:
 - Add test phone numbers with fixed codes in Supabase when testing without sending real SMS.
 
 The website never receives or stores a user's password or OTP. The Google and phone provider secrets stay in Supabase configuration, not in `index.html`.
+
+
+## Production redirect rule
+
+The website now uses `https://bugdata-commits.github.io/car-finder/` for recovery and OAuth redirects whenever it is running in production. Localhost redirects are used only when the page is opened on `localhost` or `127.0.0.1`. Supabase Authentication → URL Configuration must still contain the production URL and any local URLs used for testing.

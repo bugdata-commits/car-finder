@@ -1203,7 +1203,14 @@
 /* ============ SUPABASE CONFIG ============ */
 const SUPABASE_URL = 'https://eeodzwzxpquqwtvccqab.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_XfRxNZPVEiyPofK-mUXAKw_hfJueFXJ';
+const PRODUCTION_SITE_URL = 'https://bugdata-commits.github.io/car-finder/';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function getAuthRedirectUrl(){
+  const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1') return `${window.location.origin}${window.location.pathname}`;
+  return PRODUCTION_SITE_URL;
+}
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23e2e6ec"/><text x="50%" y="50%" font-family="sans-serif" font-size="16" fill="%235b6b80" text-anchor="middle">No photo yet</text></svg>`
 );
@@ -1598,7 +1605,7 @@ async function handlePasswordRecovery(e){
   if (!/^\S+@\S+\.\S+$/.test(email)) { err.textContent = 'Enter a valid email address.'; err.style.display = 'block'; return; }
   btn.disabled = true; btn.textContent = 'Sending…'; err.style.display = 'none';
   try {
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const redirectTo = getAuthRedirectUrl();
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
     if (error) throw error;
     document.getElementById('authOverlay').classList.remove('open');
@@ -1689,7 +1696,7 @@ async function handleGoogleSignIn(){
   if (btn) { btn.disabled = true; btn.textContent = 'Connecting to Google…'; }
   if (errEl) errEl.style.display = 'none';
   try {
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const redirectTo = getAuthRedirectUrl();
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo }
