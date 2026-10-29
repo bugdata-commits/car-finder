@@ -642,7 +642,13 @@
   .hero-image-search{position:absolute;right:2.9%;bottom:10.6%;width:26%;height:8%;min-height:44px;display:block;border-radius:999px;color:transparent;text-decoration:none;}
   .hero-image-search:focus-visible{outline:3px solid #ffc400;outline-offset:4px;background:rgba(255,255,255,.12);}
   .hero .search-panel{margin-top:26px;}
+  @media(min-width:861px){
+    .hero-banner{height:348px;}
+    .hero-banner img{height:348px;object-fit:cover;object-position:center 46%;}
+    .hero .search-panel{margin-top:20px;}
+  }
   @media(max-width:560px){
+    .wrap{padding-inline:16px;}
     .hero{padding-bottom:26px;}
     .hero-image-search{right:2.6%;bottom:10%;width:28%;height:11%;}
     .hero .search-panel{margin-top:18px;}
