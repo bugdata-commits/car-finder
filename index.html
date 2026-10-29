@@ -1556,15 +1556,149 @@ function openAuthModal(mode){
       ${isSignup ? `<label style="display:flex;gap:9px;align-items:flex-start;color:var(--sand-dim);font-size:12.5px;line-height:1.45;"><input id="authPolicyConsent" type="checkbox" required style="margin-top:3px;"><span>I agree to the <a href="#" data-view="terms">Terms &amp; Conditions</a> and <a href="#" data-view="privacy">Privacy Policy</a>.</span></label>` : ''}
       <div id="authError" style="color:var(--alert);font-size:13px;display:none;"></div>
       <button type="submit" class="match-btn" id="authSubmitBtn">${isSignup ? 'Create account' : 'Sign in'}</button>
+      <div style="display:flex;align-items:center;gap:10px;color:var(--sand-dim);font-size:12px;margin-top:2px;"><span style="height:1px;background:var(--line);flex:1;"></span><span>or</span><span style="height:1px;background:var(--line);flex:1;"></span></div>
+      <button type="button" class="btn-outline" id="authGoogleBtn" style="width:100%;flex:none;color:var(--sand);">Continue with Google</button>
     </form>
+    ${!isSignup ? `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:12.5px;"><a href="#" id="authForgotPassword" style="color:var(--sienna);font-weight:600;">Forgot password?</a><a href="#" id="authEmailOtp" style="color:var(--sienna);">Use email code</a><a href="#" id="authPhoneOtp" style="color:var(--sienna);">Use phone OTP</a></div>` : ''}
     <div style="margin-top:14px;font-size:13.5px;color:var(--sand-dim);">
       ${isSignup ? "Already have an account?" : "New to CarFinder?"}
       <a href="#" id="authSwitchLink" style="color:var(--sienna);font-weight:600;">${isSignup ? 'Sign in' : 'Create an account'}</a>
     </div>`;
   on('authCloseBtn', 'click', () => overlay.classList.remove('open'));
   on('authSwitchLink', 'click', e => { e.preventDefault(); openAuthModal(isSignup ? 'signin' : 'signup'); });
+  on('authGoogleBtn', 'click', handleGoogleSignIn);
+  on('authForgotPassword', 'click', e => { e.preventDefault(); openPasswordRecoveryModal(); });
+  on('authEmailOtp', 'click', e => { e.preventDefault(); openEmailOtpModal(); });
+  on('authPhoneOtp', 'click', e => { e.preventDefault(); openPhoneOtpModal(); });
   on('authForm', 'submit', handleAuthSubmit);
   overlay.classList.add('open');
+}
+
+function authInput(id, type, label, placeholder=''){
+  return `<div class="quiz-field" style="margin:0;"><label for="${id}">${label}</label><input id="${id}" type="${type}" required placeholder="${placeholder}" style="width:100%;background:var(--charcoal);border:1px solid var(--line);color:var(--sand);padding:10px 11px;border-radius:var(--radius);font-size:14px;font-family:inherit;"></div>`;
+}
+
+function openRecoveryShell(title, subtitle, body){
+  const overlay = document.getElementById('authOverlay');
+  document.getElementById('authModal').innerHTML = `<button class="modal-close" id="authCloseBtn" aria-label="Close">&times;</button><h2>${title}</h2><p style="color:var(--sand-dim);font-size:13.5px;margin-top:6px;">${subtitle}</p>${body}`;
+  on('authCloseBtn', 'click', () => overlay.classList.remove('open'));
+  overlay.classList.add('open');
+}
+
+function openPasswordRecoveryModal(){
+  openRecoveryShell('Reset your password', 'We will send a secure reset link to your email address.', `<form id="recoveryForm" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">${authInput('recoveryEmail','email','Email address','you@example.com')}<div id="recoveryError" style="color:var(--alert);font-size:13px;display:none;"></div><button type="submit" class="match-btn" id="recoverySubmit">Send reset link</button></form><p style="margin-top:14px;font-size:12.5px;color:var(--sand-dim);">For your privacy, the message will look the same whether or not an account exists.</p>`);
+  on('recoveryForm', 'submit', handlePasswordRecovery);
+}
+
+async function handlePasswordRecovery(e){
+  e.preventDefault();
+  const email = cleanText(document.getElementById('recoveryEmail').value, 254).toLowerCase();
+  const btn = document.getElementById('recoverySubmit');
+  const err = document.getElementById('recoveryError');
+  if (!/^\S+@\S+\.\S+$/.test(email)) { err.textContent = 'Enter a valid email address.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…'; err.style.display = 'none';
+  try {
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw error;
+    document.getElementById('authOverlay').classList.remove('open');
+    showToast('If that email is registered, a reset link is on its way.');
+  } catch (error) {
+    err.textContent = error.message || 'Unable to send the reset email.'; err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Send reset link';
+  }
+}
+
+function openSetPasswordModal(message='Choose a new password'){
+  openRecoveryShell('Set a new password', message, `<form id="newPasswordForm" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">${authInput('newPassword','password','New password','At least 8 characters')}${authInput('confirmPassword','password','Confirm new password')}<div id="newPasswordError" style="color:var(--alert);font-size:13px;display:none;"></div><button type="submit" class="match-btn" id="newPasswordSubmit">Update password</button></form>`);
+  on('newPasswordForm', 'submit', handleSetPassword);
+}
+
+async function handleSetPassword(e){
+  e.preventDefault();
+  const password = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+  const err = document.getElementById('newPasswordError');
+  const btn = document.getElementById('newPasswordSubmit');
+  if (password.length < 8 || password.length > 128) { err.textContent = 'Password must be between 8 and 128 characters.'; err.style.display = 'block'; return; }
+  if (password !== confirm) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Updating…'; err.style.display = 'none';
+  const { error } = await sb.auth.updateUser({ password });
+  if (error) { err.textContent = error.message || 'Unable to update password.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Update password'; return; }
+  document.getElementById('authOverlay').classList.remove('open');
+  showToast('Password updated successfully.');
+}
+
+function openEmailOtpModal(){
+  openRecoveryShell('Reset with an email code', 'Enter your account email and we will send a one-time code.', `<form id="emailOtpForm" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">${authInput('otpEmail','email','Email address','you@example.com')}<div id="emailOtpError" style="color:var(--alert);font-size:13px;display:none;"></div><button type="submit" class="match-btn" id="emailOtpSubmit">Send email code</button></form>`);
+  on('emailOtpForm', 'submit', handleEmailOtpSend);
+}
+
+async function handleEmailOtpSend(e){
+  e.preventDefault();
+  const email = cleanText(document.getElementById('otpEmail').value, 254).toLowerCase();
+  const err = document.getElementById('emailOtpError');
+  const btn = document.getElementById('emailOtpSubmit');
+  if (!/^\S+@\S+\.\S+$/.test(email)) { err.textContent = 'Enter a valid email address.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+    if (error) throw error;
+    openOtpVerifyModal('email', email, 'email');
+  } catch (error) { err.textContent = error.message || 'Unable to send the email code.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Send email code'; }
+}
+
+function openPhoneOtpModal(){
+  openRecoveryShell('Reset with a phone code', 'Enter the phone number linked to your account in international format.', `<form id="phoneOtpForm" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">${authInput('otpPhone','tel','Phone number','+263771234567')}<div id="phoneOtpError" style="color:var(--alert);font-size:13px;display:none;"></div><button type="submit" class="match-btn" id="phoneOtpSubmit">Send phone code</button></form>`);
+  on('phoneOtpForm', 'submit', handlePhoneOtpSend);
+}
+
+async function handlePhoneOtpSend(e){
+  e.preventDefault();
+  const phone = cleanText(document.getElementById('otpPhone').value, 20).replace(/[^+\d]/g, '');
+  const err = document.getElementById('phoneOtpError');
+  const btn = document.getElementById('phoneOtpSubmit');
+  if (!/^\+[1-9]\d{7,14}$/.test(phone)) { err.textContent = 'Use international format, for example +263771234567.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const { error } = await sb.auth.signInWithOtp({ phone, options: { shouldCreateUser: false } });
+    if (error) throw error;
+    openOtpVerifyModal('phone', phone, 'sms');
+  } catch (error) { err.textContent = error.message || 'Unable to send the phone code.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Send phone code'; }
+}
+
+function openOtpVerifyModal(kind, identifier, type){
+  openRecoveryShell('Enter your one-time code', `We sent a 6-digit code to ${identifier}.`, `<form id="verifyOtpForm" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">${authInput('otpToken','text','One-time code','123456')}<div id="verifyOtpError" style="color:var(--alert);font-size:13px;display:none;"></div><button type="submit" class="match-btn" id="verifyOtpSubmit">Verify code</button></form>`);
+  on('verifyOtpForm', 'submit', async e => {
+    e.preventDefault();
+    const token = document.getElementById('otpToken').value.replace(/\D/g, '');
+    const err = document.getElementById('verifyOtpError');
+    const btn = document.getElementById('verifyOtpSubmit');
+    if (!/^\d{6}$/.test(token)) { err.textContent = 'Enter the 6-digit code.'; err.style.display = 'block'; return; }
+    btn.disabled = true; btn.textContent = 'Verifying…';
+    const credentials = kind === 'phone' ? { phone: identifier, token, type } : { email: identifier, token, type };
+    const { error } = await sb.auth.verifyOtp(credentials);
+    if (error) { err.textContent = error.message || 'That code is invalid or expired.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Verify code'; return; }
+    openSetPasswordModal('Code verified. Choose a new password, or close this window to continue signed in.');
+  });
+}
+
+async function handleGoogleSignIn(){
+  const btn = document.getElementById('authGoogleBtn');
+  const errEl = document.getElementById('authError');
+  if (btn) { btn.disabled = true; btn.textContent = 'Connecting to Google…'; }
+  if (errEl) errEl.style.display = 'none';
+  try {
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo }
+    });
+    if (error) throw error;
+  } catch (err) {
+    if (errEl) { errEl.textContent = err.message || 'Google sign-in could not start.'; errEl.style.display = 'block'; }
+    if (btn) { btn.disabled = false; btn.textContent = 'Continue with Google'; }
+  }
 }
 
 async function handleAuthSubmit(e){
@@ -1636,6 +1770,9 @@ async function checkIsAdmin(userId){
 }
 
 sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    openSetPasswordModal('Your recovery link is valid. Choose a new password.');
+  }
   currentUser = session ? session.user : null;
   myFavorites = new Set();
   if (currentUser){
