@@ -485,6 +485,13 @@
   footer ul a{color:rgba(255,255,255,0.65);font-size:14px;}
   footer ul a:hover{color:#fff;}
   .foot-bottom{display:flex;justify-content:space-between;color:rgba(255,255,255,0.45);font-size:12.5px;flex-wrap:wrap;gap:8px;}
+  @media(max-width:560px){
+    footer .foot-grid{text-align:center;}
+    footer .foot-grid > div{display:flex;flex-direction:column;align-items:center;}
+    footer .foot-desc{margin-left:auto;margin-right:auto;}
+    footer ul{align-items:center;}
+    footer .foot-bottom{justify-content:center;text-align:center;}
+  }
 
 
   /* ---------- marketplace search upgrade ---------- */
@@ -1009,7 +1016,7 @@
         </div>
         <div class="admin-table-wrap pending-review-wrap">
           <table class="compare-table admin-table pending-review-table">
-            <thead><tr><th>Vehicle</th><th>Seller</th><th>Submitted</th><th>Price</th><th>Review</th></tr></thead>
+            <thead><tr><th>Vehicle</th><th>Type</th><th>Seller</th><th>Submitted</th><th>Price</th><th>Review</th></tr></thead>
             <tbody id="pendingListingsBody"></tbody>
           </table>
         </div>
@@ -1020,7 +1027,7 @@
       <div class="listings-head"><h2>All listings</h2><div class="result-count" id="adminListingCount">—</div></div>
       <div style="overflow-x:auto;margin-bottom:50px;">
         <table class="compare-table" style="min-width:720px;">
-          <thead><tr><th>Car</th><th>Seller</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Car</th><th>Type</th><th>Seller</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
           <tbody id="adminListingsBody"></tbody>
         </table>
       </div>
@@ -2485,9 +2492,10 @@ function renderAdminDashboard(){
   if (pendingBody) pendingBody.innerHTML = pending.map(c => `
     <tr>
       <td data-label="Vehicle"><b>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}</b><br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.city || '—')} · ${fmtMileage(c.mileage)}</span></td>
+      <td data-label="Type"><b>${isRental(c) ? 'For rent' : 'For sale'}</b>${isRental(c) ? `<br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.rental_period || 'per day')}</span>` : ''}</td>
       <td data-label="Seller">${c.profiles ? escapeHtml(c.profiles.display_name || '—') : '—'}</td>
       <td data-label="Submitted">${daysAgo(c.created_at)}</td>
-      <td data-label="Price">${fmtPrice(c.price)}</td>
+      <td data-label="Price">${fmtListingPrice(c)}</td>
       <td data-label="Review"><button type="button" class="btn-outline admin-review-btn" data-id="${escapeHtml(c.id)}" aria-label="Review ${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)}" style="padding:7px 12px;">Review listing</button></td>
     </tr>`).join('');
   if (pendingEmpty){
@@ -2509,7 +2517,8 @@ function renderAdminDashboard(){
   document.getElementById('adminListingCount').textContent = adminListings.length + ' listings';
   document.getElementById('adminListingsBody').innerHTML = adminListings.map(c => `
     <tr>
-      <td>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)} · ${fmtPrice(c.price)}</td>
+      <td>${escapeHtml(c.year)} ${escapeHtml(c.make)} ${escapeHtml(c.model)} · ${fmtListingPrice(c)}</td>
+      <td><b>${isRental(c) ? 'For rent' : 'For sale'}</b>${isRental(c) ? `<br><span style="color:var(--sand-dim);font-size:12px;">${escapeHtml(c.rental_period || 'per day')}</span>` : ''}</td>
       <td>${c.profiles ? escapeHtml(c.profiles.display_name) : '—'}</td>
       <td><span class="admin-status ${c.status === 'pending' ? 'pending' : ''}">${escapeHtml(c.status || 'unknown')}</span></td>
       <td>${c.featured ? '★' : '—'}</td>
@@ -2552,7 +2561,7 @@ function openAdminListingReview(id){
     ? photos.map((url,i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(car.year)} ${escapeHtml(car.make)} ${escapeHtml(car.model)} photo ${i+1}" loading="lazy">`).join('')
     : '<p style="color:var(--sand-dim);">No photos submitted.</p>';
   const info = [
-    ['Price',fmtPrice(car.price)],['Year',car.year],['Mileage',fmtMileage(car.mileage)],['City',car.city],
+    ['Listing type',isRental(car) ? 'For rent' : 'For sale'],['Price',fmtListingPrice(car)],...(isRental(car) ? [['Rental period',car.rental_period || 'per day']] : []),['Year',car.year],['Mileage',fmtMileage(car.mileage)],['City',car.city],
     ['Transmission',car.transmission],['Fuel',car.fuel],['Clearance',car.clearance],['Category',car.category],
     ['Seller',seller.display_name || '—'],['Seller WhatsApp',seller.whatsapp_number || '—'],['Seller type',seller.seller_type || '—'],['Submitted',car.created_at ? new Date(car.created_at).toLocaleString() : '—']
   ];
