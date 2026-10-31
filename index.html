@@ -779,7 +779,6 @@
               <div class="field"><label for="fuelType">Fuel</label><select id="fuelType"><option value="">Any fuel</option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
               <div class="field"><label for="trans">Transmission</label><select id="trans"><option value="">Any transmission</option><option>Manual</option><option>Automatic</option></select></div>
               <div class="field"><label for="clearanceFilter">Import status</label><select id="clearanceFilter"><option value="">Any status</option><option>Cleared</option><option>Uncleared</option></select></div>
-              <div class="field"><label for="listingTypeFilter">Listing type</label><select id="listingTypeFilter"><option value="">Buy or rent</option><option value="sale">For sale</option><option value="rent">For rent</option></select></div>
               <div class="field">
                 <label>Mileage range (km)</label>
                 <div class="range-inputs">
@@ -1473,6 +1472,7 @@ function showPage(page, param){
   document.querySelectorAll('nav.links a[data-page], .mobile-panel a[data-page]').forEach(a => {
     a.classList.toggle('active', a.dataset.page === active);
   });
+  if (typeof syncListingModeButtons === 'function') syncListingModeButtons();
   closeMobilePanel();
 
   if (active === 'rentals') renderRentalsPage();
@@ -1915,7 +1915,6 @@ function renderListings(){
   const fuel = value('fuelType').toLowerCase();
   const bodyType = value('bodyType').toLowerCase();
   const clearance = value('clearanceFilter').toLowerCase();
-  const listingType = value('listingTypeFilter').toLowerCase();
   const verifiedOnly = !!document.getElementById('verifiedOnly')?.checked;
   const sort = document.getElementById('sort').value;
 
@@ -1935,7 +1934,8 @@ function renderListings(){
     if (trans && String(c.transmission || '').toLowerCase() !== trans.toLowerCase()) return false;
     if (fuel && String(c.fuel || '').toLowerCase() !== fuel) return false;
     if (clearance && String(c.clearance || '').toLowerCase() !== clearance) return false;
-    if (listingType && String(c.listing_type || 'sale').toLowerCase() !== listingType) return false;
+    // The homepage is deliberately sale-only. Rentals have their own page and never mix into this grid.
+    if (isRental(c)) return false;
     if (verifiedOnly && !(c.profiles && c.profiles.verified)) return false;
     if (bodyType){
       const bodyWords = {suv:['suv','crossover'],pickup:['pickup','pick-up','bakkie','truck'],sedan:['sedan','saloon'],hatchback:['hatchback','hatch'],van:['van','minibus']};
@@ -2052,29 +2052,31 @@ function renderFavoritesPage(){
 }
 
 on('searchBtn', 'click', () => { renderListings(); document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'}); });
-['sort','loc','price','priceMin','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter','listingTypeFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
+['sort','loc','price','priceMin','yearMin','yearMax','mileageMin','mileageMax','trans','fuelType','bodyType','clearanceFilter','verifiedOnly'].forEach(id => on(id, 'change', renderListings));
 document.querySelectorAll('[data-listing-mode]').forEach(btn => btn.addEventListener('click', () => {
   const mode = btn.dataset.listingMode;
-  const filter = document.getElementById('listingTypeFilter');
-  if (filter) filter.value = mode;
   document.querySelectorAll('[data-listing-mode]').forEach(control => {
     const active = control.dataset.listingMode === mode;
     control.classList.toggle('active', active);
     control.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
-  renderListings();
-  document.getElementById('listings')?.scrollIntoView({behavior:'smooth', block:'start'});
+  if (mode === 'rent') {
+    showPage('rentals');
+  } else {
+    showPage('home');
+    renderListings();
+    document.getElementById('listings')?.scrollIntoView({behavior:'smooth', block:'start'});
+  }
 }));
 ['q','price','priceMin','yearMin','yearMax','mileageMin','mileageMax'].forEach(id => on(id, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderListings(); } }));
 function syncListingModeButtons(){
-  const mode = document.getElementById('listingTypeFilter')?.value || '';
+  const mode = document.getElementById('page-rentals')?.hidden === false ? 'rent' : 'sale';
   document.querySelectorAll('[data-listing-mode]').forEach(control => {
     const active = mode === control.dataset.listingMode;
     control.classList.toggle('active', active);
     control.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
 }
-on('listingTypeFilter', 'change', syncListingModeButtons);
 document.querySelectorAll('[data-quick-search]').forEach(btn => btn.addEventListener('click', () => {
   document.getElementById('q').value = btn.dataset.quickSearch;
   renderListings();
